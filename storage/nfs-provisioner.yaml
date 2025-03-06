@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+  namespace: nfs-provisioner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      containers:
+        - name: nfs-client-provisioner
+          image: quay.io/external_storage/nfs-client-provisioner:latest
+          volumeMounts:
+            - name: nfs-volume
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: 'nfs-provisioner'
+            - name: NFS_SERVER
+              value: <REPLACE>
+            - name: NFS_PATH
+              value: '/volume1/media'
+      volumes:
+        - name: nfs-volume
+          nfs:
+            server: <REPLACE>
+            path: /volume1/media
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-media
+provisioner: nfs-provisioner
+parameters:
+  archiveOnDelete: 'false'
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
