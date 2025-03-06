@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/YOUR-USERNAME/YOUR-REPO.git'
+    repoURL: 'https://github.com/nel-thedev/k3s-arda.git'
     targetRevision: main
-    path: k8s-cluster/argocd
+    path: k3s-arda/argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
