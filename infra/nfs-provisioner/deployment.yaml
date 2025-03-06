@@ -31,13 +31,3 @@ spec:
           nfs:
             server: <REPLACE>
             path: /volume1/media
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: nfs-media
-provisioner: nfs-provisioner
-parameters:
-  archiveOnDelete: 'false'
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
