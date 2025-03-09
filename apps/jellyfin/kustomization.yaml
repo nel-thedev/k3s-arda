@@ -1,0 +1,9 @@
+resources:
+  - configs-pv.yaml
+  - media-pv.yaml
+  - deployment.yaml
+  - jellyfin-ingress.yaml
+
+secrets:
+  -name: nas-secret
+   namespace: default

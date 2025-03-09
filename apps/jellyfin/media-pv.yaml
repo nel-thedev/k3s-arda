@@ -10,7 +10,11 @@ spec:
     - ReadWriteMany
   nfs:
     path: /volume1/media
-    server: <REPLACE>
+    server:
+      valueFrom:
+        secretKeyRef:
+          name: nas-secret
+          key: NAS_IP
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: default
