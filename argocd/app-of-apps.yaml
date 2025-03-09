@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/nel-thedev/k3s-arda.git'
     targetRevision: main
-    path: k3s-arda/argocd
+    path: argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
