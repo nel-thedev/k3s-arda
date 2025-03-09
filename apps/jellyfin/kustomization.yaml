@@ -6,4 +6,4 @@ resources:
 
 secrets:
   -name: nas-secret
-   namespace: default
+  #  namespace: default
