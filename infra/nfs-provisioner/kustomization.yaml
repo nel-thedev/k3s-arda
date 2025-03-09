@@ -3,11 +3,11 @@ kind: Kustomization
 
 namespace: nfs-provisioner
 
-configMapGenerator:
-  - name: nas-config
-  - namespace: nfs-provisioner
-    literals:
-      - NAS_IP=<REPLACE>
+# configMapGenerator:
+#   - name: nas-config
+#   - namespace: nfs-provisioner
+#     literals:
+#       - NAS_IP=<REPLACE>
 
 resources:
   - deployment.yaml
@@ -16,16 +16,12 @@ resources:
   - nfs-service-account.yaml
   - storageclass.yaml
   - namespace.yaml
-# secrets:
-#   -name: nas-secret
-#   #  namespace: default
-
-vars:
-  - name: NAS_IP
-    objref:
-      kind: ConfigMap
-      name: nas-config
-      namespace: nfs-provisioner
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.NAS_IP
+# vars:
+#   - name: NAS_IP
+#     objref:
+#       kind: ConfigMap
+#       name: nas-config
+#       namespace: nfs-provisioner
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.NAS_IP
