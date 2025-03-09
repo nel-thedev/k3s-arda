@@ -23,11 +23,11 @@ spec:
             - name: PROVISIONER_NAME
               value: 'nfs-provisioner'
             - name: NFS_SERVER
-              value: <REPLACE>
+              value: ${NAS_IP}
             - name: NFS_PATH
               value: '/volume1/media'
       volumes:
         - name: nfs-volume
           nfs:
-            server: <REPLACE>
+            server: ${NAS_IP}
             path: /volume1/media
