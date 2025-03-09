@@ -5,5 +5,5 @@ resources:
   - jellyfin-ingress.yaml
 
 secrets:
-  -name: nas-secret
-  #  namespace: default
+  - name: nas-secret
+  - namespace: default
