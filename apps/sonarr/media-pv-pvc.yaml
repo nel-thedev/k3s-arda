@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: media-pv
+  name: sonarr-media-pv
   namespace: default
 spec:
   capacity:
@@ -14,12 +14,12 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: default
-    name: media-pvc
+    name: sonarr-media-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: media-pvc
+  name: sonarr-media-pvc
   namespace: default
 spec:
   accessModes:
