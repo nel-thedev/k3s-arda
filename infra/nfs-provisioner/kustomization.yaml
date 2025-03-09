@@ -22,6 +22,7 @@ vars:
     objref:
       kind: ConfigMap
       name: nas-config
+      namespace: default
       apiVersion: v1
     fieldref:
       fieldpath: data.NAS_IP
