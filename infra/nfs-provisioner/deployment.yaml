@@ -23,18 +23,11 @@ spec:
             - name: PROVISIONER_NAME
               value: 'nfs-provisioner'
             - name: NFS_SERVER
-              valueFrom:
-                secretKeyRef:
-                  name: nas-secret
-                  key: NAS_IP
+              value: '192.168.2.10'
             - name: NFS_PATH
               value: '/volume1/media'
       volumes:
         - name: nfs-volume
           nfs:
-            server:
-              valueFrom:
-                secretKeyRef:
-                  name: nas-secret
-                  key: NAS_IP
+            server: '192.168.2.10'
             path: /volume1/media

@@ -10,11 +10,7 @@ spec:
     - ReadWriteOnce
   nfs:
     path: /volume1/container-configs/jellyfin-config
-    server:
-      valueFrom:
-        secretKeyRef:
-          name: nas-secret
-          key: NAS_IP
+    server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: default
