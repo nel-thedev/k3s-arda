@@ -3,10 +3,11 @@ kind: ClusterRole
 metadata:
   # Name of the ClusterRole
   name: nfs-provisioner-role
+  namespace: nfs-provisioner
 rules:
-  - apiGroups: [""]
-    resources: ["persistentvolumes", "persistentvolumeclaims"]
-    verbs: ["list", "get", "create", "update", "patch", "delete", "watch"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses"]
-    verbs: ["list", "get", "create", "update", "patch", "delete", "watch"]
+  - apiGroups: ['']
+    resources: ['persistentvolumes', 'persistentvolumeclaims', 'endpoints']
+    verbs: ['list', 'get', 'create', 'update', 'patch', 'delete', 'watch']
+  - apiGroups: ['storage.k8s.io']
+    resources: ['storageclasses']
+    verbs: ['list', 'get', 'create', 'update', 'patch', 'delete', 'watch']
