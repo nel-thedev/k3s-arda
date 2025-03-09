@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jellyfin
+  name: nfs-provisioner
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-wave: '1'
 spec:
   project: default
   source:
     repoURL: 'https://github.com/nel-thedev/k3s-arda.git'
     targetRevision: main
-    path: apps/jellyfin
+    path: infra/nfs-provisioner
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
