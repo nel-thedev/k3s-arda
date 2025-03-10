@@ -38,7 +38,7 @@ spec:
             claimName: sonarr-config-pvc
         - name: media
           persistentVolumeClaim:
-            claimName: media-pvc
+            claimName: sonarr-media-pvc
 ---
 apiVersion: v1
 kind: Service
