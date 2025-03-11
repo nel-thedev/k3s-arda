@@ -30,21 +30,17 @@ spec:
             - name: VPN_SERVICE_PROVIDER
               value: 'mullvad'
             - name: VPN_TYPE
-              value: 'wireguard'
-            - name: WIREGUARD_PRIVATE_KEY
+              value: 'openvpn'
+            - name: OPENVPN_USER
               valueFrom:
                 secretKeyRef:
-                  name: mullvad-vpn-secrets
-                  key: WIREGUARD_PRIVATE_KEY
-            - name: WIREGUARD_ADDRESSES
+                  name: mullvad-openvpn-secrets
+                  key: OPENVPN_USER
+            - name: OPENVPN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mullvad-vpn-secrets
-                  key: WIREGUARD_ADDRESSES
-            # - name: DNS_KEEP_NAMESERVER
-            #   value: 'on'
-            # - name: FIREWALL_OUTBOUND_SUBNETS
-            #   value: '10.42.0.0/15'
+                  name: mullvad-openvpn-secrets
+                  key: OPENVPN_PASSWORD
             - name: TZ
               value: 'America/New_York'
             - name: UPDATER_PERIOD
