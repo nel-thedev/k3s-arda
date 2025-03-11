@@ -13,13 +13,14 @@ spec:
       labels:
         app: qbittorrent
     spec:
-      securityContext:
-        sysctls:
-          - name: net.ipv4.conf.all.src_valid_mark
-            value: '1'
-      containers:
+      # securityContext:
+      #   sysctls:
+      #     - name: net.ipv4.conf.all.src_valid_mark
+      #       value: '1'
+      initContainers:
         - name: gluetun
-          image: qmcgaw/gluetun
+          image: qmcgaw/gluetun:latest
+          restartPolicy: Always
           securityContext:
             capabilities:
               add:
@@ -54,6 +55,7 @@ spec:
             - containerPort: 8080
               protocol: TCP
 
+      containers:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
           securityContext:
