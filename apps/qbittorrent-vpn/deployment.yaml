@@ -19,7 +19,7 @@ spec:
       #       value: '1'
       initContainers:
         - name: gluetun
-          image: qmcgaw/gluetun:latest
+          image: qmcgaw/gluetun:v3
           restartPolicy: Always
           securityContext:
             capabilities:
@@ -41,10 +41,10 @@ spec:
                 secretKeyRef:
                   name: mullvad-vpn-secrets
                   key: WIREGUARD_ADDRESSES
-            - name: DNS_KEEP_NAMESERVER
-              value: 'on'
-            - name: FIREWALL_OUTBOUND_SUBNETS
-              value: '10.42.0.0/15'
+            # - name: DNS_KEEP_NAMESERVER
+            #   value: 'on'
+            # - name: FIREWALL_OUTBOUND_SUBNETS
+            #   value: '10.42.0.0/15'
             - name: TZ
               value: 'America/New_York'
             - name: UPDATER_PERIOD
