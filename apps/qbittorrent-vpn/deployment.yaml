@@ -25,6 +25,7 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
+                - SYS_MODULE
           env:
             - name: VPN_SERVICE_PROVIDER
               value: 'mullvad'
