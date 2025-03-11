@@ -47,20 +47,20 @@ spec:
           volumeMounts:
             - name: gluetun-config
               mountPath: /gluetun
-          ports:
-            - containerPort: 6881
-              protocol: TCP
-            - containerPort: 6881
-              protocol: UDP
-            - containerPort: 8080
-              protocol: TCP
+          # ports:
+          #   - containerPort: 6881
+          #     protocol: TCP
+          #   - containerPort: 6881
+          #     protocol: UDP
+          #   - containerPort: 8080
+          #     protocol: TCP
 
       containers:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
-          securityContext:
-            runAsUser: 13007
-            runAsGroup: 13000
+          # securityContext:
+          #   runAsUser: 13007
+          #   runAsGroup: 13000
           env:
             - name: PUID
               value: '13007'
