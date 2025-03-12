@@ -79,7 +79,7 @@ spec:
             - name: TZ
               value: 'America/New_York'
             - name: WEBUI_PORT
-              value: '8080'
+              value: '8081'
             - name: VPN_ENABLED
               value: 'true'
             - name: VPN_USER
@@ -132,5 +132,5 @@ spec:
     app: qbittorrent
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 8081
+      targetPort: 8081
