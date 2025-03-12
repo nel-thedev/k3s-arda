@@ -60,19 +60,15 @@ spec:
 
       containers:
         - name: qbittorrent
-          image: ghcr.io/hotio/qbittorrent:latest
+          image: binhex/arch-qbittorrentvpn:latest
           imagePullPolicy: Always
           # securityContext:
           #   runAsUser: 13007
           #   runAsGroup: 13000
           securityContext:
-            sysctls:
-              - name: net.ipv4.conf.all.src_valid_mark
-                value: '1'
             capabilities:
               add:
                 - NET_ADMIN
-                - NET_RAW
           env:
             - name: PUID
               value: '13007'
@@ -82,23 +78,33 @@ spec:
               value: '002'
             - name: TZ
               value: 'America/New_York'
-            - name: WEBUI_PORTS
-              value: '8080/tcp,8080/udp'
+            - name: WEBUI_PORT
+              value: '8080'
             - name: VPN_ENABLED
               value: 'true'
-            - name: VPN_CONF
-              value: 'wg0'
-            - name: VPN_PROVIDER
-              value: 'generic'
-            - name: VPN_LAN_NETWORK
+            - name: VPN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mullvad-openvpn-secrets
+                  key: OPENVPN_USER
+            - name: VPN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mullvad-openvpn-secrets
+                  key: OPENVPN_PASSWORD
+            - name: VPN_PROV
+              value: 'custom'
+            - name: VPN_CLIENT
+              value: 'openvpn'
+            - name: LAN_NETWORK
               value: '192.168.2.0/24'
-            - name: VPN_LAN_LEAK_ENABLED
-              value: 'false'
-            - name: VPN_KEEP_LOCAL_DNS
-              value: 'false'
-            - name: VPN_FIREWALL_TYPE
-              value: 'auto'
-            - name: VPN_ALLOW_INSECURE
+            # - name: VPN_LAN_LEAK_ENABLED
+            #   value: 'false'
+            # - name: VPN_KEEP_LOCAL_DNS
+            #   value: 'false'
+            # - name: VPN_FIREWALL_TYPE
+            #   value: 'auto'
+            # - name: VPN_ALLOW_INSECURE
           volumeMounts:
             - name: qbittorrent-config
               mountPath: /config
