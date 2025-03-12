@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: qbittorrent-vpn
+  name: qbittorrent
   namespace: default
 spec:
   replicas: 1
