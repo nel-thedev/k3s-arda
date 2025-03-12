@@ -61,7 +61,7 @@ spec:
       containers:
         - name: qbittorrent
           image: ghcr.io/hotio/qbittorrent:latest
-          imagePullPolicy: always
+          imagePullPolicy: Always
           # securityContext:
           #   runAsUser: 13007
           #   runAsGroup: 13000
