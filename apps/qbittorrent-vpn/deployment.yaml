@@ -17,50 +17,51 @@ spec:
       #   sysctls:
       #     - name: net.ipv4.conf.all.src_valid_mark
       #       value: '1'
-      initContainers:
-        - name: gluetun
-          image: qmcgaw/gluetun:v3
-          restartPolicy: Always
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
-                - SYS_MODULE
-          env:
-            - name: FIREWALL_OUTBOUND_SUBNETS
-              value: 10.43.0.0/16
-            - name: VPN_SERVICE_PROVIDER
-              value: 'mullvad'
-            - name: VPN_TYPE
-              value: 'openvpn'
-            - name: OPENVPN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mullvad-openvpn-secrets
-                  key: OPENVPN_USER
-            - name: OPENVPN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mullvad-openvpn-secrets
-                  key: OPENVPN_PASSWORD
-            - name: TZ
-              value: 'America/New_York'
-            - name: UPDATER_PERIOD
-              value: '24h'
-          volumeMounts:
-            - name: gluetun-config
-              mountPath: /gluetun
-          # ports:
-          #   - containerPort: 6881
-          #     protocol: TCP
-          #   - containerPort: 6881
-          #     protocol: UDP
-          #   - containerPort: 8080
-          #     protocol: TCP
+      # initContainers:
+      #   - name: gluetun
+      #     image: qmcgaw/gluetun:v3
+      #     restartPolicy: Always
+      #     securityContext:
+      #       capabilities:
+      #         add:
+      #           - NET_ADMIN
+      #           - SYS_MODULE
+      #     env:
+      #       - name: FIREWALL_OUTBOUND_SUBNETS
+      #         value: 10.43.0.0/16
+      #       - name: VPN_SERVICE_PROVIDER
+      #         value: 'mullvad'
+      #       - name: VPN_TYPE
+      #         value: 'openvpn'
+      #       - name: OPENVPN_USER
+      #         valueFrom:
+      #           secretKeyRef:
+      #             name: mullvad-openvpn-secrets
+      #             key: OPENVPN_USER
+      #       - name: OPENVPN_PASSWORD
+      #         valueFrom:
+      #           secretKeyRef:
+      #             name: mullvad-openvpn-secrets
+      #             key: OPENVPN_PASSWORD
+      #       - name: TZ
+      #         value: 'America/New_York'
+      #       - name: UPDATER_PERIOD
+      #         value: '24h'
+      #     volumeMounts:
+      #       - name: gluetun-config
+      #         mountPath: /gluetun
+      #     # ports:
+      #     #   - containerPort: 6881
+      #     #     protocol: TCP
+      #     #   - containerPort: 6881
+      #     #     protocol: UDP
+      #     #   - containerPort: 8080
+      #     #     protocol: TCP
 
       containers:
         - name: qbittorrent
-          image: lscr.io/linuxserver/qbittorrent:latest
+          image: ghcr.io/hotio/qbittorrent:latest
+          imagePullPolicy: always
           # securityContext:
           #   runAsUser: 13007
           #   runAsGroup: 13000
@@ -73,8 +74,23 @@ spec:
               value: '002'
             - name: TZ
               value: 'America/New_York'
-            - name: WEBUI_PORT
-              value: '8080'
+            - name: WEBUI_PORTS
+              value: '8080/tcp,8080/udp'
+            - name: VPN_ENABLED
+              value: 'true'
+            - name: VPN_CONF
+              value: 'wg0'
+            - name: VPN_PROVIDER
+              value: 'generic'
+            - name: VPN_LAN_NETWORK
+              value: '192.168.2.0/24'
+            - name: VPN_LAN_LEAK_ENABLED
+              value: 'false'
+            - name: VPN_KEEP_LOCAL_DNS
+              value: 'false'
+            - name: VPN_FIREWALL_TYPE
+              value: 'auto'
+            - name: VPN_ALLOW_INSECURE
           volumeMounts:
             - name: qbittorrent-config
               mountPath: /config
