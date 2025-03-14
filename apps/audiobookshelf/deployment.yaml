@@ -57,6 +57,6 @@ spec:
   selector:
     app: audiobookshelf
   ports:
-    - port: 7878
-      targetPort: 7878
+    - port: 13378
+      targetPort: 13378
   type: ClusterIP

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: audiobookshelf
+  namespace: default
+spec:
+  rules:
+    - host: audiobookshelf.hexagonlabs.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: audiobookshelf
+                port:
+                  number: 13378
