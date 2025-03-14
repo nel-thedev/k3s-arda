@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audiobookshelf-metadata-pv
+  namespace: default
+spec:
+  capacity:
+    storage: 2Ti
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /volume1/media/audiobookshelf-metadata
+    server: '192.168.2.10'
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: default
+    name: audiobookshelf-metadata-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobookshelf-metadata-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Ti
