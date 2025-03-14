@@ -58,58 +58,58 @@ spec:
       #     #   - containerPort: 8080
       #     #     protocol: TCP
 
-      containers:
-        - name: qbittorrent
-          image: binhex/arch-qbittorrentvpn:latest
-          imagePullPolicy: Always
-          # securityContext:
-          #   runAsUser: 13007
-          #   runAsGroup: 13000
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
-          env:
-            - name: PUID
-              value: '13007'
-            - name: PGID
-              value: '13000'
-            - name: UMASK
-              value: '002'
-            - name: TZ
-              value: 'America/New_York'
-            - name: WEBUI_PORT
-              value: '8081'
-            - name: VPN_ENABLED
-              value: 'true'
-            - name: VPN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mullvad-openvpn-secrets
-                  key: OPENVPN_USER
-            - name: VPN_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: mullvad-openvpn-secrets
-                  key: OPENVPN_PASSWORD
-            - name: VPN_PROV
-              value: 'custom'
-            - name: VPN_CLIENT
-              value: 'openvpn'
-            - name: LAN_NETWORK
-              value: '192.168.2.0/24'
-            # - name: VPN_LAN_LEAK_ENABLED
-            #   value: 'false'
-            # - name: VPN_KEEP_LOCAL_DNS
-            #   value: 'false'
-            # - name: VPN_FIREWALL_TYPE
-            #   value: 'auto'
-            # - name: VPN_ALLOW_INSECURE
-          volumeMounts:
-            - name: qbittorrent-config
-              mountPath: /config
-            - name: qbittorrent-torrents
-              mountPath: /data/torrents
+      # containers:
+      #   - name: qbittorrent
+      #     image: binhex/arch-qbittorrentvpn:latest
+      #     imagePullPolicy: Always
+      #     # securityContext:
+      #     #   runAsUser: 13007
+      #     #   runAsGroup: 13000
+      #     securityContext:
+      #       capabilities:
+      #         add:
+      #           - NET_ADMIN
+      #     env:
+      #       - name: PUID
+      #         value: '13007'
+      #       - name: PGID
+      #         value: '13000'
+      #       - name: UMASK
+      #         value: '002'
+      #       - name: TZ
+      #         value: 'America/New_York'
+      #       - name: WEBUI_PORT
+      #         value: '8081'
+      #       - name: VPN_ENABLED
+      #         value: 'true'
+      #       - name: VPN_USER
+      #         valueFrom:
+      #           secretKeyRef:
+      #             name: mullvad-openvpn-secrets
+      #             key: OPENVPN_USER
+      #       - name: VPN_PASS
+      #         valueFrom:
+      #           secretKeyRef:
+      #             name: mullvad-openvpn-secrets
+      #             key: OPENVPN_PASSWORD
+      #       - name: VPN_PROV
+      #         value: 'custom'
+      #       - name: VPN_CLIENT
+      #         value: 'openvpn'
+      #       - name: LAN_NETWORK
+      #         value: '192.168.2.0/24'
+      #       # - name: VPN_LAN_LEAK_ENABLED
+      #       #   value: 'false'
+      #       # - name: VPN_KEEP_LOCAL_DNS
+      #       #   value: 'false'
+      #       # - name: VPN_FIREWALL_TYPE
+      #       #   value: 'auto'
+      #       # - name: VPN_ALLOW_INSECURE
+      #     volumeMounts:
+      #       - name: qbittorrent-config
+      #         mountPath: /config
+      #       - name: qbittorrent-torrents
+      #         mountPath: /data/torrents
 
       volumes:
         - name: gluetun-config
@@ -121,6 +121,62 @@ spec:
         - name: qbittorrent-torrents
           persistentVolumeClaim:
             claimName: qbittorrent-torrents-pvc
+        - name: vpn-config
+          secret:
+            secretName: vpn-config
+            items:
+              - key: client.ovpn
+                path: client.ovpn
+        - name: vpn-auth
+          secret:
+            secretName: vpn-auth
+            items:
+              - key: auth.txt
+                path: auth.txt
+        - name: tmp
+          emptyDir: {}
+
+      initContainers:
+        - name: vpn
+          image: dperson/openvpn-client
+          restartPolicy: Always
+          command: ['/bin/sh', '-c']
+          args:
+            [
+              "openvpn --config 'vpn/client.ovpn' --auth-user-pass 'vpn/auth.txt' --script-security 3;",
+            ]
+          stdin: true
+          tty: true
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - NET_ADMIN
+          env:
+            - name: TZ
+              value: 'America/New_York'
+          volumeMounts:
+            - name: vpn-config
+              mountPath: /vpn/client.ovpn
+              subPath: client.ovpn
+            - name: vpn-auth
+              mountPath: /vpn/auth.txt
+              subPath: auth.txt
+            - name: tmp
+              mountPath: /tmp/route
+
+      containers:
+        # app to print ip address
+        - name: ip
+          image: radial/busyboxplus:curl
+          command: ['sh', '-c']
+          args: ['while true; do curl -s ifconfig.me; sleep 10; done']
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp/route
+
 ---
 apiVersion: v1
 kind: Service
