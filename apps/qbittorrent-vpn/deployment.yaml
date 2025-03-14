@@ -59,11 +59,8 @@ spec:
             - name: vpn-auth
               mountPath: /vpn/auth.txt
               subPath: auth.txt
-            - name: tmp
-              mountPath: /tmp/route
 
       containers:
-        # app to print ip address
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
           env:
