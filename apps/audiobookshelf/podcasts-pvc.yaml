@@ -14,12 +14,12 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: default
-    name: podcasts-pvc
+    name: audiobookshelf-podcasts-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: podcasts-pvc
+  name: audiobookshelf-podcasts-pvc
   namespace: default
 spec:
   accessModes:
