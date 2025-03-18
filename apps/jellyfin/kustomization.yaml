@@ -3,3 +3,4 @@ resources:
   - media-pv.yaml
   - deployment.yaml
   - jellyfin-ingress.yaml
+  - jellyfin-hpa.yaml
