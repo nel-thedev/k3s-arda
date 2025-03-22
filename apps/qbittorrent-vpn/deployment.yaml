@@ -83,15 +83,12 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  # Fetch geolocation information
                   geo_info=$(curl -s http://ipinfo.io/json)
                   
-                  # Extract the region (state) from the response using grep
                   state=$(echo $geo_info | grep -oP '"region":\s*"\K[^"]+')
                   
-                  # Check if the state is Florida
                   if [ "$state" == "Florida" ]; then
-                    exit 1  # Fail if the state is Florida
+                    exit 1 
                   fi
             initialDelaySeconds: 10
             periodSeconds: 300
