@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-container-configs
+spec:
+  schedule: "0 2 * * 1,4"  # Runs at 2 AM every Monday and Thursday
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: alpine:latest
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  BACKUP_DIR="/mnt/container-configs-backup"
+                  TIMESTAMP=$(date +\%Y\%m\%d)
+                  rsync -av --delete /mnt/container-configs/ "$BACKUP_DIR/container-configs-$TIMESTAMP"
+                  # Keep only the last 4 backups
+                  ls -1t $BACKUP_DIR | grep 'container-configs-' | tail -n +5 | xargs -I {} rm -rf "$BACKUP_DIR/{}"
+              volumeMounts:
+                - name: configs
+                  mountPath: /mnt/container-configs
+                - name: backup
+                  mountPath: /mnt/container-configs-backup
+              securityContext:
+                runAsUser: 1000  
+                runAsGroup: 1000  
+          volumes:
+            - name: configs
+              nfs:
+                server: 192.168.2.10
+                path: /volume1/container-configs
+            - name: backup
+              nfs:
+                server: 192.168.2.10
+                path: /volume1/container-configs-backup
