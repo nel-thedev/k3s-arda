@@ -16,16 +16,17 @@ spec:
               command: ["/bin/sh", "-c"]
               args:
                 - |
-                  BACKUP_DIR="/mnt/container-configs-backup"
+                  BACKUP_DIR="/mnt/container-configs-backups"
                   TIMESTAMP=$(date +\%Y\%m\%d)
-                  rsync -av --delete /mnt/container-configs/ "$BACKUP_DIR/container-configs-$TIMESTAMP"
+                  mkdir -p "$BACKUP_DIR/container-configs-$TIMESTAMP"
+                  rsync -av /mnt/container-configs/ "$BACKUP_DIR/container-configs-$TIMESTAMP"
                   # Keep only the last 4 backups
                   ls -1t $BACKUP_DIR | grep 'container-configs-' | tail -n +5 | xargs -I {} rm -rf "$BACKUP_DIR/{}"
               volumeMounts:
                 - name: configs
                   mountPath: /mnt/container-configs
                 - name: backup
-                  mountPath: /mnt/container-configs-backup
+                  mountPath: /mnt/container-configs-backups
               securityContext:
                 runAsUser: 1000  
                 runAsGroup: 1000  
@@ -37,4 +38,4 @@ spec:
             - name: backup
               nfs:
                 server: 192.168.2.10
-                path: /volume1/container-configs-backup
+                path: /volume1/container-configs-backups
