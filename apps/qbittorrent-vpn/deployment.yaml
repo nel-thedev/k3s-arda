@@ -83,15 +83,15 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  geo_info=$(curl -s http://ipinfo.io/json)
-                  
+                  geo_info=$(curl -s --max-time 5 http://ipinfo.io/json)
                   state=$(echo $geo_info | grep -oP '"region":\s*"\K[^"]+')
-                  
                   if [ "$state" == "Florida" ]; then
                     exit 1 
                   fi
+                  exit 0
             initialDelaySeconds: 10
             periodSeconds: 300
+            timeoutSeconds: 5
             failureThreshold: 3
             successThreshold: 1
 
