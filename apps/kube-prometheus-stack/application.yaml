@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-user/k3s-arda.git
-    targetRevision: HEAD
+    repoURL: https://github.com/nel-thedev/k3s-arda.git
+    targetRevision: main
     path: apps/monitoring/kube-prometheus-stack
     helm:
       valueFiles:
