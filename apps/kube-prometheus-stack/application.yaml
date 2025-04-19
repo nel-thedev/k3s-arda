@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/nel-thedev/k3s-arda.git
     targetRevision: main
-    path: apps/monitoring/kube-prometheus-stack
+    path: apps/kube-prometheus-stack
     helm:
       valueFiles:
         - values.yaml
