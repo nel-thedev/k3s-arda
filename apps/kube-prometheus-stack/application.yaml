@@ -4,9 +4,9 @@ metadata:
   name: kube-prometheus-stack
   namespace: argocd
 spec:
-  # destination:
-  #   namespace: monitoring
-  #   server: https://kubernetes.default.svc
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
   project: default
   sources:
     - repoURL: https://prometheus-community.github.io/helm-charts
