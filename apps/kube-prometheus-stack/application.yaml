@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/nel-thedev/k3s-arda.git
-    targetRevision: main
-    path: apps/kube-prometheus-stack
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 15.0.0
+    chart: kube-prometheus-stack
     helm:
       valueFiles:
         - values.yaml
