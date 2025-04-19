@@ -6,45 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    chart: kube-prometheus-stack
-    targetRevision: 58.2.0
+    repoURL: https://github.com/your-user/k3s-arda.git
+    targetRevision: HEAD
+    path: apps/monitoring/kube-prometheus-stack
     helm:
-      values: |
-        grafana:
-          enabled: true
-          adminUser: admin
-          adminPassword: admin
-          persistence:
-            enabled: true
-            storageClassName: nfs-client
-            size: 5Gi
-          database:
-            type: postgres
-            host: postgres.monitoring.svc.cluster.local
-            name: grafana
-            user: grafana
-            password:
-              existingSecret: grafana-db-secret
-              key: password
-          ingress:
-            enabled: true
-            annotations:
-              nginx.ingress.kubernetes.io/rewrite-target: /
-            hosts:
-              - grafana.hexagonlabs.cloud
-            path: /
-            pathType: Prefix
-        prometheus:
-          prometheusSpec:
-            storageSpec:
-              volumeClaimTemplate:
-                spec:
-                  storageClassName: nfs-client
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 8Gi
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
