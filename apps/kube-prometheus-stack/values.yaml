@@ -10,6 +10,7 @@ grafana:
       - grafana.hexagonlabs.cloud
     path: /
     pathType: Prefix
+    ingressClassName: nginx
   service:
     type: ClusterIP
 
@@ -26,6 +27,7 @@ prometheus:
       - prometheus.hexagonlabs.cloud
     path: /
     pathType: Prefix
+    ingressClassName: nginx
 
 alertmanager:
   enabled: true
@@ -37,6 +39,7 @@ alertmanager:
       - alertmanager.hexagonlabs.cloud
     path: /
     pathType: Prefix
+    ingressClassName: nginx
 
 # Enable default rules and dashboards
 defaultRules:
