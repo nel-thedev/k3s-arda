@@ -8,69 +8,46 @@ spec:
     namespace: monitoring
     server: https://kubernetes.default.svc
   project: default
-  sources:
-    - repoURL: https://prometheus-community.github.io/helm-charts
-      chart: kube-prometheus-stack
-      targetRevision: 70.7.0
-      helm:
-        values: |
-          grafana:
-            enabled: true
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 70.7.0
+    helm:
+      values: |
+        grafana:
+          enabled: true
+          adminPassword: 
             existingSecret: grafana-admin-secret
               passwordKey: admin-password
-            ingress:
-              enabled: true
-              annotations:
-                nginx.ingress.kubernetes.io/rewrite-target: /
-              hosts:
-                - grafana.hexagonlabs.cloud
-              path: /
-              pathType: Prefix
-              ingressClassName: nginx
-            service:
-              type: ClusterIP
-
-          prometheus:
-            prometheusSpec:
-              serviceMonitorSelectorNilUsesHelmValues: false
-              retention: 10d
-              enableAdminAPI: true
-            ingress:
-              enabled: true
-              annotations:
-                nginx.ingress.kubernetes.io/rewrite-target: /
-              hosts:
-                - prometheus.hexagonlabs.cloud
-              path: /
-              pathType: Prefix
-              ingressClassName: nginx
-
-          alertmanager:
+          ingress:
             enabled: true
-            ingress:
-              enabled: true
-              annotations:
-                nginx.ingress.kubernetes.io/rewrite-target: /
-              hosts:
-                - alertmanager.hexagonlabs.cloud
-              path: /
-              pathType: Prefix
-              ingressClassName: nginx
+            annotations:
+              kubernetes.io/ingress.class: "nginx"
+            hosts:
+              - "grafana.hexagonlabs.cloud"
+            path: /
+            pathType: Prefix
+            tls: []
 
-          # Enable default rules and dashboards
-          defaultRules:
-            create: true
-
-          nodeExporter:
+        prometheus:
+          ingress:
             enabled: true
+            annotations:
+              kubernetes.io/ingress.class: "nginx"
+            hosts:
+              - "prometheus.hexagonlabs.cloud""
+            path: /
+            pathType: Prefix
 
-          kubeStateMetrics:
+        alertmanager:
+          ingress:
             enabled: true
-
-    - repoURL: https://github.com/nel-thedev/k3s-arda.git
-      targetRevision: main
-      ref: values
-      path: apps/kube-prometheus-stack
+            annotations:
+              kubernetes.io/ingress.class: "nginx"
+            hosts:
+              - "alertmanager.hexagonlabs.cloud""
+            path: /
+            pathType: Prefix
   syncPolicy:
     automated:
       selfHeal: true
