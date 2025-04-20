@@ -11,6 +11,7 @@ spec:
   source:
     repoURL: https://github.com/nel-thedev/k3s-arda.git
     path: apps/kube-prometheus-stack
+    ref: values
     helm:
       valueFiles:
         - $values/values.yaml
