@@ -16,10 +16,13 @@ spec:
       targetRevision: main
       ref: values
       path: apps/kube-prometheus-stack
-  helm:
-    valueFiles:
-      - $values/values.yaml
+  source:
+    helm:
+      valueFiles:
+        - $values/values.yaml
   syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
     syncOptions:
-      - ServerSideApply=true
       - CreateNamespace=true
