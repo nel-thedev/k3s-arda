@@ -11,6 +11,9 @@ spec:
   source:
     repoURL: https://github.com/nel-thedev/k3s-arda.git
     path: apps/kube-prometheus-stack
+    helm:
+      valueFiles:
+        - $values/values.yaml
   sources:
     - repoURL: https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
@@ -19,9 +22,6 @@ spec:
       targetRevision: main
       ref: values
       path: apps/kube-prometheus-stack
-  helm:
-    valueFiles:
-      - $values/values.yaml
   syncPolicy:
     automated:
       selfHeal: true
