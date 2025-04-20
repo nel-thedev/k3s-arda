@@ -16,26 +16,25 @@ spec:
       values: |
         grafana:
           enabled: true
-          adminPassword: 
+          admin:
             existingSecret: grafana-admin-secret
-              passwordKey: admin-password
+            passwordKey: admin-password
           ingress:
             enabled: true
             annotations:
-              kubernetes.io/ingress.class: "nginx"
+              kubernetes.io/ingress.class: nginx
             hosts:
-              - "grafana.hexagonlabs.cloud"
+              - grafana.hexagonlabs.cloud
             path: /
             pathType: Prefix
-            tls: []
 
         prometheus:
           ingress:
             enabled: true
             annotations:
-              kubernetes.io/ingress.class: "nginx"
+              kubernetes.io/ingress.class: nginx
             hosts:
-              - "prometheus.hexagonlabs.cloud""
+              - prometheus.hexagonlabs.cloud
             path: /
             pathType: Prefix
 
@@ -43,9 +42,9 @@ spec:
           ingress:
             enabled: true
             annotations:
-              kubernetes.io/ingress.class: "nginx"
+              kubernetes.io/ingress.class: nginx
             hosts:
-              - "alertmanager.hexagonlabs.cloud""
+              - alertmanager.hexagonlabs.cloud
             path: /
             pathType: Prefix
   syncPolicy:
@@ -54,4 +53,3 @@ spec:
       prune: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
