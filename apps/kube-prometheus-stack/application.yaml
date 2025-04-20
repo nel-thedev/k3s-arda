@@ -13,8 +13,60 @@ spec:
       chart: kube-prometheus-stack
       targetRevision: 70.7.0
       helm:
-        valueFiles:
-          - values.yaml
+        values: |
+          grafana:
+            enabled: true
+            existingSecret: grafana-admin-secret
+              passwordKey: admin-password
+            ingress:
+              enabled: true
+              annotations:
+                nginx.ingress.kubernetes.io/rewrite-target: /
+              hosts:
+                - grafana.hexagonlabs.cloud
+              path: /
+              pathType: Prefix
+              ingressClassName: nginx
+            service:
+              type: ClusterIP
+
+          prometheus:
+            prometheusSpec:
+              serviceMonitorSelectorNilUsesHelmValues: false
+              retention: 10d
+              enableAdminAPI: true
+            ingress:
+              enabled: true
+              annotations:
+                nginx.ingress.kubernetes.io/rewrite-target: /
+              hosts:
+                - prometheus.hexagonlabs.cloud
+              path: /
+              pathType: Prefix
+              ingressClassName: nginx
+
+          alertmanager:
+            enabled: true
+            ingress:
+              enabled: true
+              annotations:
+                nginx.ingress.kubernetes.io/rewrite-target: /
+              hosts:
+                - alertmanager.hexagonlabs.cloud
+              path: /
+              pathType: Prefix
+              ingressClassName: nginx
+
+          # Enable default rules and dashboards
+          defaultRules:
+            create: true
+
+          nodeExporter:
+            enabled: true
+
+          kubeStateMetrics:
+            enabled: true
+
     - repoURL: https://github.com/nel-thedev/k3s-arda.git
       targetRevision: main
       ref: values
