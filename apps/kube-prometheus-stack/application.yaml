@@ -23,7 +23,7 @@ spec:
           ingress:
             enabled: true
             annotations:
-              kubernetes.io/ingress.class: nginx
+              kubernetes.io/ingress.class: traefik
             hosts:
               - grafana.hexagonlabs.cloud
             path: /
@@ -33,7 +33,7 @@ spec:
           ingress:
             enabled: true
             annotations:
-              kubernetes.io/ingress.class: nginx
+              kubernetes.io/ingress.class: traefik
             hosts:
               - prometheus.hexagonlabs.cloud
             path: /
@@ -43,7 +43,7 @@ spec:
           ingress:
             enabled: true
             annotations:
-              kubernetes.io/ingress.class: nginx
+              kubernetes.io/ingress.class: traefik
             hosts:
               - alertmanager.hexagonlabs.cloud
             path: /
