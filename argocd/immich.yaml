@@ -11,8 +11,6 @@ spec:
     repoURL: https://github.com/nel-thedev/k3s-arda.git
     targetRevision: main
     path: apps/immich
-    plugin:
-      name: kustomize-helm
   destination:
     server: https://kubernetes.default.svc
     namespace: immich
