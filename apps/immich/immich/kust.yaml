@@ -2,8 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 helmCharts:
   - name: immich
-    repo: https://immich.app/helm-charts
-    version: 0.5.2
+    repo: https://immich-app.github.io/immich-charts
+    version: 0.9.2
     releaseName: immich
     namespace: immich
-    valuesFile: helm-values.yaml
+    includeCRDs: true
+    valuesFile: values.yaml
