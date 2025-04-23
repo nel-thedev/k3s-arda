@@ -1,0 +1,10 @@
+auth:
+  username: immich
+  existingSecret: immich-secret
+  secretKeys:
+    userPasswordKey: DB_PASSWORD
+  database: immich
+primary:
+  persistence:
+    enabled: true
+    size: 10Gi

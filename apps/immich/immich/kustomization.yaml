@@ -1,0 +1,7 @@
+helmCharts:
+  - name: immich
+    repo: https://immich.app/helm-charts
+    version: 0.5.2
+    releaseName: immich
+    namespace: immich
+    valuesFile: helm-values.yaml

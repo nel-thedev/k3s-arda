@@ -1,0 +1,7 @@
+helmCharts:
+  - name: postgresql
+    repo: https://charts.bitnami.com/bitnami
+    version: 15.5.2
+    releaseName: immich-postgres
+    namespace: immich
+    valuesFile: helm-values.yaml
