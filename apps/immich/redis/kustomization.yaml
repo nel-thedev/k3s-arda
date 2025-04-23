@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# helmCharts:
+#   - name: redis
+#     repo: https://charts.bitnami.com/bitnami
+#     version: 19.5.4
+#     releaseName: immich-redis
+#     namespace: immich
+#     valuesFile: helm-values.yaml
+
+resources:
+  - application.yaml
