@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/nel-thedev/k3s-arda.git
     targetRevision: main
-    path: apps/immich
+    path: apps/immich/immich
   destination:
     server: https://kubernetes.default.svc
     namespace: immich

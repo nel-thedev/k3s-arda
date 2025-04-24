@@ -1,43 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immich
+  name: immich-server
   namespace: immich
 spec:
-  destination:
-    namespace: immich
-    server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://immich-app.github.io/immich-charts
-    chart: immich
-    targetRevision: 0.9.2
-    helm:
-      values: |
-        redis:
-          enabled: false
-          
-        postgres:
-          enabled: false
-
-        envFrom:
-          - secretRef:
-              name: immich-secret
-
-        env:
-          DB_USERNAME: immich
-          DB_DATABASE_NAME: immich
-          DB_HOSTNAME: immich-postgres-postgresql
-          REDIS_HOSTNAME: immich-redis-master
-
-        persistence:
-          library:
-            enabled: true
-            existingClaim: immich-media-pvc
+    repoURL: https://github.com/nel-thedev/k3s-arda.git
+    targetRevision: main
+    path: apps/immich/immich
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: immich
   syncPolicy:
     automated:
-      selfHeal: true
       prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true

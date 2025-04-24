@@ -4,3 +4,4 @@ resources:
   - redis/
   - namespace.yaml
   - pv-pvc.yaml
+  - ingress.yaml
