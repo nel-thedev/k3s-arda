@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/nel-thedev/k3s-arda.git
     targetRevision: main
-    path: apps/immich/immich
+    path: apps/immich
     directory:
       recurse: true
   destination:
