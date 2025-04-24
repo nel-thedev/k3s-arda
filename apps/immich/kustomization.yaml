@@ -2,6 +2,5 @@ resources:
   - immich/
   - postgres/
   - redis/
-  - ingress.yaml
   - namespace.yaml
   - pv-pvc.yaml
