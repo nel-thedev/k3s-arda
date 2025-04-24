@@ -1,7 +1,7 @@
-resources:
-  - immich/
-  - postgres/
-  - redis/
-  - namespace.yaml
-  - pv-pvc.yaml
-  - ingress.yaml
+# resources:
+#   - immich/
+#   - postgres/
+#   - redis/
+#   - namespace.yaml
+#   - pv-pvc.yaml
+#   - ingress.yaml
