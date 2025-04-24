@@ -27,10 +27,11 @@ spec:
           DB_HOSTNAME: immich-postgres-postgresql
           REDIS_HOSTNAME: immich-redis-master
 
-        persistence:
-          library:
-            enabled: true
-            existingClaim: immich-media-pvc
+        immich:
+          persistence:
+            library:
+              enabled: true
+              existingClaim: immich-media-pvc
 
   destination:
     server: https://kubernetes.default.svc
