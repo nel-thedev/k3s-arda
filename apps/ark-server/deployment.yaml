@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ark-server
+  labels:
+    app: ark-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ark-server
+  template:
+    metadata:
+      labels:
+        app: ark-server
+    spec:
+      containers:
+        - name: ark
+          image: hermsi/ark-server:latest
+          ports:
+            - containerPort: 7777
+              protocol: UDP
+            - containerPort: 7778
+              protocol: UDP
+            - containerPort: 27015
+              protocol: UDP
+          env:
+            - name: SESSION_NAME
+              value: "HijosDeArceus"
+            - name: SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ark-server-secrets
+                  key: SERVER_PASSWORD
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ark-server-secrets
+                  key: ADMIN_PASSWORD
+            - name: MAX_PLAYERS
+              value: "5"
+            - name: SERVER_MAP
+              value: "TheIsland"
+            - name: BACKUP_ON_STOP
+              value: true
+            - name: WARN_ON_STOP
+              value: true
+            - name: ENABLE_CROSSPLAY
+              value: true
+            - name: DISABLE_BATTLEYE
+              value: true
+            
+          volumeMounts:
+            - name: ark-data
+              mountPath: /ark
+      volumes:
+        - name: ark-data
+          persistentVolumeClaim:
+            claimName: ark-pvc
