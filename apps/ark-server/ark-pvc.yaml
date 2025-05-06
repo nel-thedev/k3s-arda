@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: ark-pv
-  namespace: default
+  namespace: ark-server
 spec:
   capacity:
     storage: 2Ti
@@ -13,14 +13,14 @@ spec:
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: default
+    namespace: ark-server
     name: ark-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ark-pvc
-  namespace: default
+  namespace: ark-server
 spec:
   accessModes:
     - ReadWriteMany
