@@ -2,5 +2,5 @@ resources:
   - deployment.yaml
   - ark-svc.yaml
   - ark-pvc.yaml
-  - secret.yaml
+#  - secret.yaml
   - metallb-config.yaml
