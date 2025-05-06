@@ -27,7 +27,7 @@ spec:
               protocol: UDP
           env:
             - name: SESSION_NAME
-              value: "HijosDeArceus"
+              value: 'HijosDeArceus'
             - name: SERVER_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -39,18 +39,18 @@ spec:
                   name: ark-server-secrets
                   key: ADMIN_PASSWORD
             - name: MAX_PLAYERS
-              value: "5"
+              value: '5'
             - name: SERVER_MAP
-              value: "TheIsland"
+              value: 'TheIsland'
             - name: BACKUP_ON_STOP
-              value: true
+              value: 'true'
             - name: WARN_ON_STOP
-              value: true
+              value: 'true'
             - name: ENABLE_CROSSPLAY
-              value: true
+              value: 'true'
             - name: DISABLE_BATTLEYE
-              value: true
-            
+              value: 'true'
+
           volumeMounts:
             - name: ark-data
               mountPath: /ark
