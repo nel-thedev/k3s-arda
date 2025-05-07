@@ -21,6 +21,7 @@ metadata:
   name: ark-pvc
   namespace: ark-server
 spec:
+  storageClassName: ''
   accessModes:
     - ReadWriteMany
   resources:
