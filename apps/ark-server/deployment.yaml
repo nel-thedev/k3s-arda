@@ -54,7 +54,7 @@ spec:
 
           volumeMounts:
             - name: ark-data
-              mountPath: /ark
+              mountPath: /app/server
       volumes:
         - name: ark-data
           persistentVolumeClaim:
