@@ -29,10 +29,11 @@ spec:
             - name: SESSION_NAME
               value: 'HijosDeArceus'
             - name: SERVER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ark-server-secrets
-                  key: SERVER_PASSWORD
+              value: ''
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: ark-server-secrets
+              #     key: SERVER_PASSWORD
             - name: ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
