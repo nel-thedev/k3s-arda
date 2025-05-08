@@ -18,6 +18,10 @@ spec:
       containers:
         - name: ark
           image: hermsi/ark-server:latest
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
           ports:
             - containerPort: 7777
               protocol: UDP
