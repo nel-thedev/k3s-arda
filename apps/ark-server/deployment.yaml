@@ -15,8 +15,8 @@ spec:
       labels:
         app: ark-server
     spec:
-      securityContext:
-        fsGroup: 1000
+      # securityContext:
+      #   fsGroup: 1000
       containers:
         - name: ark
           image: hermsi/ark-server:latest
