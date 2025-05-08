@@ -15,16 +15,9 @@ spec:
       labels:
         app: ark-server
     spec:
-      securityContext:
-        fsGroup: 1000
       containers:
         - name: ark
           image: hermsi/ark-server:latest
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
           ports:
             - containerPort: 7777
               protocol: UDP
