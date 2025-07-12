@@ -16,35 +16,14 @@ spec:
       containers:
         - name: wol-server
           image: python:3.11-alpine
-          command: [ "sh", "-c" ]
+          command: ["sh", "-c"]
           args:
             - |
-              pip install wakeonlan && \
-              echo '
-              from http.server import BaseHTTPRequestHandler, HTTPServer
-              import subprocess
-              from urllib.parse import urlparse, parse_qs
-
-              class Handler(BaseHTTPRequestHandler):
-                  def do_POST(self):
-                      if self.path.startswith("/wake"):
-                          qs = parse_qs(urlparse(self.path).query)
-                          mac = qs.get("mac", [None])[0]
-                          if not mac:
-                              self.send_response(400)
-                              self.end_headers()
-                              self.wfile.write(b"Missing mac")
-                              return
-                          subprocess.run(["wakeonlan", mac])
-                          self.send_response(200)
-                          self.end_headers()
-                          self.wfile.write(f"Sent to {mac}".encode())
-                      else:
-                          self.send_response(404)
-                          self.end_headers()
-
-              HTTPServer(("", 9001), Handler).serve_forever()
-              ' > /srv/wol.py && python3 /srv/wol.py
+              pip install wakeonlan && python3 /srv/wol.py
+          volumeMounts:
+            - name: wol-script
+              mountPath: /srv/wol.py
+              subPath: wol.py
           ports:
             - containerPort: 9001
         - name: n8n
@@ -89,6 +68,10 @@ spec:
             claimName: n8n-pvc
         - name: shared-bin
           emptyDir: {}
+        - name: wol-script
+          configMap:
+            name: wol-script
+
 ---
 apiVersion: v1
 kind: Service
