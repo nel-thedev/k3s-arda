@@ -13,17 +13,6 @@ spec:
       labels:
         app: n8n
     spec:
-      initContainers:
-        - name: install-wakeonlan
-          image: python:3.11-alpine
-          command: [ "sh", "-c" ]
-          args:
-            - |
-              pip install wakeonlan && cp $(which wakeonlan) /shared/
-          volumeMounts:
-            - name: shared-bin
-              mountPath: /shared
-
       containers:
         - name: n8n
           image: n8nio/n8n:latest
@@ -61,6 +50,34 @@ spec:
               mountPath: /home/node/.n8n
             - name: shared-bin
               mountPath: /opt/local-bin
+        - name: wol-server
+          image: python:3.11-alpine
+          command: ["sh", "-c"]
+          args:
+            - |
+              pip install wakeonlan && \
+              echo "$WOL_SERVER" > /wol.py && \
+              python3 /wol.py
+          env:
+            - name: WOL_SERVER
+              value: |
+                from http.server import BaseHTTPRequestHandler, HTTPServer
+                import subprocess
+
+                class Handler(BaseHTTPRequestHandler):
+                    def do_POST(self):
+                        if self.path == '/wake':
+                            subprocess.run(["wakeonlan", "00:11:22:33:44:55"])
+                            self.send_response(200)
+                            self.end_headers()
+                            self.wfile.write(b"Magic packet sent")
+                        else:
+                            self.send_response(404)
+                            self.end_headers()
+
+                HTTPServer(("", 9001), Handler).serve_forever()
+          ports:
+            - containerPort: 9001
       volumes:
         - name: n8n-data
           persistentVolumeClaim:
