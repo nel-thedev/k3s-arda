@@ -53,13 +53,15 @@ spec:
               value: "America/New_York"
             - name: N8N_LOG_LEVEL
               value: "info"
+            - name: PATH
+              value: "/opt/local-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ports:
             - containerPort: 5678
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n
             - name: shared-bin
-              mountPath: /usr/local/bin
+              mountPath: /opt/local-bin
       volumes:
         - name: n8n-data
           persistentVolumeClaim:
