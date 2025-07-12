@@ -15,12 +15,11 @@ spec:
     spec:
       initContainers:
         - name: install-wakeonlan
-          image: debian:bookworm-slim
-          command: ['sh', '-c']
+          image: alpine:latest
+          command: [ "sh", "-c" ]
           args:
             - |
-              apt update && apt install -y wakeonlan
-              cp /usr/bin/wakeonlan /shared/
+              apk add --no-cache wakeonlan && cp /usr/bin/wakeonlan /shared/
           volumeMounts:
             - name: shared-bin
               mountPath: /shared
