@@ -34,7 +34,7 @@ spec:
             - name: N8N_PORT
               value: "5678"
             - name: N8N_PROTOCOL
-              value: "http"
+              value: "https"
             - name: N8N_PATH
               value: "/"
             - name: GENERIC_TIMEZONE
