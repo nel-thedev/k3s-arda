@@ -15,11 +15,11 @@ spec:
     spec:
       initContainers:
         - name: install-wakeonlan
-          image: alpine:latest
+          image: python:3.11-alpine
           command: [ "sh", "-c" ]
           args:
             - |
-              apk add --no-cache wakeonlan && cp /usr/bin/wakeonlan /shared/
+              pip install wakeonlan && cp $(which wakeonlan) /shared/
           volumeMounts:
             - name: shared-bin
               mountPath: /shared
