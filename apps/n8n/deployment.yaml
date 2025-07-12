@@ -16,8 +16,11 @@ spec:
       containers:
         - name: wol-server
           image: python:3.11-alpine
-          command: ["python3"]
-          args: ["/srv/wol.py"]
+          command: ["sh", "-c"]
+          args:
+            - |
+              pip install wakeonlan && \
+              python3 /srv/wol.py
           volumeMounts:
             - name: wol-script
               mountPath: /srv/wol.py
