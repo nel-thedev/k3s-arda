@@ -19,7 +19,9 @@ spec:
           command: ["sh", "-c"]
           args:
             - |
-              pip install wakeonlan && python3 /srv/wol.py
+              pip install wakeonlan && \
+              echo "Starting Python..." && \
+              python3 /srv/wol.py 2>&1 || echo "Python exited with $?"; sleep 9999
           volumeMounts:
             - name: wol-script
               mountPath: /srv/wol.py
