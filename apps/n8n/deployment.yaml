@@ -16,38 +16,37 @@ spec:
       containers:
         - name: wol-server
           image: python:3.11-alpine
-          command: ["sh", "-c"]
+          command: [ "sh", "-c" ]
           args:
             - |
               pip install wakeonlan && \
-              echo "$WOL_SERVER" > /wol.py && \
-              python3 /wol.py
-          env:
-            - name: WOL_SERVER
-              value: |
-                from http.server import BaseHTTPRequestHandler, HTTPServer
-                import subprocess
-                from urllib.parse import urlparse, parse_qs
+              echo '
+              from http.server import BaseHTTPRequestHandler, HTTPServer
+              import subprocess
+              from urllib.parse import urlparse, parse_qs
 
-                class Handler(BaseHTTPRequestHandler):
-                    def do_POST(self):
-                        if self.path.startswith('/wake'):
-                            qs = parse_qs(urlparse(self.path).query)
-                            mac = qs.get("mac", [None])[0]
-                            if not mac:
-                                self.send_response(400)
-                                self.end_headers()
-                                self.wfile.write(b"Missing 'mac' query param")
-                                return
-                            subprocess.run(["wakeonlan", mac])
-                            self.send_response(200)
-                            self.end_headers()
-                            self.wfile.write(f"Magic packet sent to {mac}".encode())
-                        else:
-                            self.send_response(404)
-                            self.end_headers()
+              class Handler(BaseHTTPRequestHandler):
+                  def do_POST(self):
+                      if self.path.startswith("/wake"):
+                          qs = parse_qs(urlparse(self.path).query)
+                          mac = qs.get("mac", [None])[0]
+                          if not mac:
+                              self.send_response(400)
+                              self.end_headers()
+                              self.wfile.write(b"Missing mac")
+                              return
+                          subprocess.run(["wakeonlan", mac])
+                          self.send_response(200)
+                          self.end_headers()
+                          self.wfile.write(f"Sent to {mac}".encode())
+                      else:
+                          self.send_response(404)
+                          self.end_headers()
 
-                HTTPServer(("", 9001), Handler).serve_forever()
+              HTTPServer(("", 9001), Handler).serve_forever()
+              ' > /srv/wol.py && python3 /srv/wol.py
+          ports:
+            - containerPort: 9001
         - name: n8n
           image: n8nio/n8n:latest
           env:
