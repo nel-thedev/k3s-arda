@@ -9,7 +9,7 @@ data:
     credentials-file: /etc/cloudflared/cert.json
     ingress:
       - hostname: n8n.hexagonlabs.cloud
-        service: http://n8n.default.svc.cluster.local:5678
+        service: http://n8n.default.svc.cluster.local:80
       - service: http_status:404
 ---
 apiVersion: apps/v1
