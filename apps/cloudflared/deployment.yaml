@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cloudflared-config
+  namespace: default
 data:
   config.yaml: |
     tunnel: n8n-tunnel
@@ -15,6 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloudflared
+  namespace: default
 spec:
   replicas: 1
   selector:
