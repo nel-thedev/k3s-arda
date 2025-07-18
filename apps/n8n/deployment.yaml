@@ -54,6 +54,8 @@ spec:
               value: "America/New_York"
             - name: N8N_LOG_LEVEL
               value: "info"
+            - name: WEBHOOK_TUNNEL_URL
+              value: https://n8n.hexagonlabs.cloud
             - name: PATH
               value: "/opt/local-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ports:
