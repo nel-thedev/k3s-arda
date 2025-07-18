@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+data:
+  config.yaml: |
+    tunnel: n8n-tunnel
+    credentials-file: /etc/cloudflared/cert.json
+    ingress:
+      - hostname: n8n.hexagonlabs.cloud
+        service: http://n8n.default.svc.cluster.local:5678
+      - service: http_status:404
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:latest
+          args: ["tunnel", "--config", "/etc/cloudflared/config.yaml", "run"]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared/
+      volumes:
+        - name: config
+          projected:
+            sources:
+              - configMap:
+                  name: cloudflared-config
+              - secret:
+                  name: cloudflared-credentials
