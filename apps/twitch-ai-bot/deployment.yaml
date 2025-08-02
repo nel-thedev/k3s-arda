@@ -16,6 +16,32 @@ spec:
       containers:
         - name: bot
           image: ghcr.io/nel-thedev/twitch-ai-bot:latest
-          envFrom:
-            - secretRef:
-                name: twitch-ai-bot-secret
+          env:
+            - name: TWITCH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: twitch-ai-bot-secret
+                  key: TWITCH_USERNAME
+
+            - name: TWITCH_OAUTH
+              valueFrom:
+                secretKeyRef:
+                  name: twitch-ai-bot-secret
+                  key: TWITCH_OAUTH
+
+            - name: CHANNEL
+              valueFrom:
+                secretKeyRef:
+                  name: twitch-ai-bot-secret
+                  key: CHANNEL
+
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: twitch-ai-bot-secret
+                  key: OPENAI_API_KEY
+
+            - name: ADMINS
+              value: sonofneltv
+
+
