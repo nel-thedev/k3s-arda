@@ -13,7 +13,7 @@ data:
       birdfeeder:
         ffmpeg:
           inputs:
-            - path: ${RTSP_URL}
+            - path: ${FRIGATE_RTSP_URL}
               roles:
                 - detect
         detect:
