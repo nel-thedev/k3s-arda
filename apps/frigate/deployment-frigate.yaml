@@ -34,11 +34,14 @@ spec:
           env:
             - name: FRIGATE_CONFIG_FILE
               value: /config/config.yml
-            - name: RTSP_URL
-              valueFrom:
-                secretKeyRef:
-                  name: frigate-secrets
-                  key: RTSP_URL
+            # - name: RTSP_URL
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: frigate-secrets
+            #       key: RTSP_URL
+          envFrom:
+            - secretRef:
+                name: frigate-secrets
           ports:
             - name: http
               containerPort: 5000
