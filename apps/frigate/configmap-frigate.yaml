@@ -14,7 +14,7 @@ data:
       birdfeeder:
         ffmpeg:
           inputs:
-            - path: ${FRIGATE_RTSP_URL}
+            - path: rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.2.50:554/stream1
               roles:
                 - detect
         detect:
