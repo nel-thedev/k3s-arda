@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: frigate-config-template
+  name: frigate-config
   namespace: cctv
 data:
   config.yml.tpl: |
