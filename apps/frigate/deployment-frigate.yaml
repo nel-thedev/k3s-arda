@@ -15,6 +15,16 @@ spec:
       labels:
         app: frigate
     spec:
+      initContainers:
+        - name: copy-config
+          image: busybox
+          command: ["/bin/sh", "-c", "cp /input/* /output/"]
+          volumeMounts:
+            - name: frigate-config
+              mountPath: /input
+            - name: frigate-config-writable
+              mountPath: /output
+              
       containers:
         - name: frigate
           image: ghcr.io/blakeblackshear/frigate:stable
@@ -30,7 +40,7 @@ spec:
             - name: http
               containerPort: 5000
           volumeMounts:
-            - name: frigate-config
+            - name: frigate-config-writable
               mountPath: /config
             - name: frigate-storage
               mountPath: /media/frigate
@@ -45,6 +55,8 @@ spec:
         - name: frigate-config
           configMap:
             name: frigate-config
+        - name: frigate-config-writable
+          emptyDir: {}
         - name: frigate-storage
           persistentVolumeClaim:
             claimName: frigate-pvc
