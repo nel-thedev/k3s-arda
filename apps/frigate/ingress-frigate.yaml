@@ -4,8 +4,7 @@ metadata:
   name: frigate
   namespace: cctv
   annotations:
-    argocd.argoproj.io/sync-wave: "30"
-
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
   rules:

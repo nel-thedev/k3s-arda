@@ -5,8 +5,6 @@ metadata:
   namespace: cctv
   labels:
     app: frigate
-  annotations:
-    argocd.argoproj.io/sync-wave: "20"
 spec:
   replicas: 1
   selector:
@@ -17,13 +15,9 @@ spec:
       labels:
         app: frigate
     spec:
-      # If you want to pin to a node:
-      # nodeSelector:
-      #   kubernetes.io/hostname: k3s-manwe
       containers:
         - name: frigate
           image: ghcr.io/blakeblackshear/frigate:stable
-          imagePullPolicy: IfNotPresent
           args: ["-c", "/config/config.yml"]
           env:
             - name: RTSP_URL
@@ -31,19 +25,14 @@ spec:
                 secretKeyRef:
                   name: frigate-secrets
                   key: RTSP_URL
-            - name: UPLOADER_URL
-              value: "http://frigate-discord-uploader.cctv.svc.cluster.local:8080"
           ports:
             - name: http
               containerPort: 5000
           volumeMounts:
             - name: frigate-config
               mountPath: /config
-            - name: frigate-config-template
-              mountPath: /config-tpl
-            - name: media-ram
+            - name: frigate-storage
               mountPath: /media/frigate
-          # Ephemeral media in RAM; Frigate expects /media/frigate by default
           resources:
             requests:
               cpu: "500m"
@@ -51,39 +40,10 @@ spec:
             limits:
               cpu: "2000m"
               memory: "2Gi"
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
-      initContainers:
-        - name: render-config
-          image: alpine:3.20
-          command:
-            - /bin/sh
-            - -c
-            - |
-              apk add --no-cache envsubst
-              mkdir -p /config
-              envsubst < /config-tpl/config.yml.tpl > /config/config.yml
-          env:
-            - name: RTSP_URL
-              valueFrom:
-                secretKeyRef:
-                  name: frigate-secrets
-                  key: RTSP_URL
-            - name: UPLOADER_URL
-              value: "http://frigate-discord-uploader.cctv.svc.cluster.local:8080"
-          volumeMounts:
-            - name: frigate-config
-              mountPath: /config
-            - name: frigate-config-template
-              mountPath: /config-tpl
       volumes:
         - name: frigate-config
-          emptyDir: {}
-        - name: frigate-config-template
           configMap:
-            name: frigate-config-template
-        - name: media-ram
-          emptyDir:
-            medium: Memory
-            sizeLimit: 512Mi
+            name: frigate-config
+        - name: frigate-storage
+          persistentVolumeClaim:
+            claimName: frigate-pvc

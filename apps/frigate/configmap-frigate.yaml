@@ -22,7 +22,10 @@ data:
           width: 1280
           height: 720
         record:
-          enabled: false
+          enabled: true
+          retain:
+            days: 2
+            mode: motion
         snapshots:
           enabled: true
           timestamp: false
@@ -34,9 +37,3 @@ data:
           post_capture: 5
           retain:
             default: 0
-
-    # Send event webhooks when clips finish (“end”)
-    # Frigate sends JSON with paths well use to upload to Discord
-    webhooks:
-      - url: ${UPLOADER_URL}/frigate
-        verify_ssl: false
