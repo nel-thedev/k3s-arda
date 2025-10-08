@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: frigate
   namespace: cctv
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
   rules:
