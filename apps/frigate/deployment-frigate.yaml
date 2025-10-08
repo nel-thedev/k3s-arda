@@ -42,8 +42,8 @@ spec:
               memory: "2Gi"
       volumes:
         - name: frigate-config
-          configMap:
-            name: frigate-config
+          persistentVolumeClaim:
+            claimName: frigate-config-pvc
         - name: frigate-storage
           persistentVolumeClaim:
             claimName: frigate-pvc
