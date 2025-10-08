@@ -4,19 +4,18 @@ metadata:
   name: frigate-config
   namespace: cctv
 data:
-  config.yml.tpl: |
+  config.yml: |
     mqtt: null
-
     detectors:
       cpu1:
         type: cpu
-
     cameras:
       birdfeeder:
         ffmpeg:
           inputs:
             - path: ${RTSP_URL}
-              roles: [detect]
+              roles:
+                - detect
         detect:
           enabled: true
           width: 1280
@@ -30,10 +29,4 @@ data:
           enabled: true
           timestamp: false
           retain:
-            default: 1
-        clips:
-          enabled: true
-          pre_capture: 5
-          post_capture: 5
-          retain:
-            default: 0
+            default: 2
