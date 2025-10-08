@@ -18,8 +18,9 @@ spec:
       containers:
         - name: frigate
           image: ghcr.io/blakeblackshear/frigate:stable
-          args: ["-c", "/config/config.yml"]
           env:
+            - name: FRIGATE_CONFIG_FILE
+              value: /config/config.yml
             - name: RTSP_URL
               valueFrom:
                 secretKeyRef:
