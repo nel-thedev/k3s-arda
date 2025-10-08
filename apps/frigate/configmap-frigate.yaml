@@ -5,6 +5,8 @@ metadata:
   namespace: cctv
 data:
   config.yml: |
+    mqtt:
+      enabled: False
     detectors:
       cpu1:
         type: cpu
