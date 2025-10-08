@@ -9,5 +9,5 @@ spec:
   ports:
     - name: http
       port: 5000
-      targetPort: http
+      targetPort: 5000
   type: ClusterIP
