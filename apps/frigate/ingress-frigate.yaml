@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frigate
+  namespace: cctv
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: frigate.hexagonlabs.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frigate
+                port:
+                  number: 5000

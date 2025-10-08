@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frigate-discord-app
+  namespace: cctv
+data:
+  app.py: |
+    import os, json, requests
+    from flask import Flask, request, jsonify
+
+    DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK_URL")
+    app = Flask(__name__)
+
+    def post_discord(file_path, text=None):
+      data = {}
+      if text:
+        data["content"] = text
+      files = {}
+      if file_path and os.path.exists(file_path):
+        files["file"] = open(file_path, "rb")
+      r = requests.post(DISCORD_WEBHOOK, data=data, files=files, timeout=30)
+      return r.status_code, r.text
+
+    @app.route("/healthz")
+    def healthz():
+      return "ok"
+
+    @app.route("/frigate", methods=["POST"])
+    def frigate():
+      data = request.get_json(force=True, silent=True) or {}
+      event_type = data.get("type")
+      cam = data.get("after", {}).get("camera") or data.get("camera") or "unknown"
+      # Frigate sends media under keys like after/snapshot/path or after/event/clip_path (varies by version/config)
+      snapshot_path = (
+        data.get("after", {})
+            .get("snapshot", {})
+            .get("path")
+      )
+      clip_path = (
+        data.get("after", {})
+            .get("event", {})
+            .get("clip_path")
+        or data.get("after", {})
+            .get("clip", {})
+            .get("path")
+      )
+
+      # Prefer clip if available; fall back to snapshot
+      file_path = clip_path or snapshot_path
+
+      text = f"[{cam}] event: {event_type}"
+      try:
+        status, body = post_discord(file_path, text=text)
+        return jsonify({"ok": True, "status": status}), 200
+      except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
