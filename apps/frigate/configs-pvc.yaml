@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: frigate-config-pv
-  namespace: default
+  namespace: cctv
 spec:
   capacity:
     storage: 10Gi
@@ -13,14 +13,14 @@ spec:
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: default
+    namespace: cctv
     name: frigate-config-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: frigate-config-pvc
-  namespace: default
+  namespace: cctv
 spec:
   accessModes:
     - ReadWriteOnce
