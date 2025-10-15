@@ -6,9 +6,13 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/external-secrets/external-secrets.git
-    targetRevision: v0.20.3
-    path: deploy
+    repoURL: https://charts.external-secrets.io
+    chart: external-secrets
+    targetRevision: 0.20.3
+    helm:
+      releaseName: external-secrets
+      values: |
+        installCRDs: true
   destination:
     server: https://kubernetes.default.svc
     namespace: external-secrets
