@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - https://github.com/external-secrets/external-secrets/releases/latest/download/install-bundle.yaml
 namespace: external-secrets
+  
