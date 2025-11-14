@@ -42,11 +42,3 @@ data:
           timestamp: false
           retain:
             default: 2
-    notify:
-      enabled: true
-      endpoints:
-        - name: n8n-events
-          url: http://n8n.n8n.svc.cluster.local:5678/webhook/frigate
-          timeout: 10
-          verify_ssl: false
-
