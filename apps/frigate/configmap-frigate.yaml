@@ -6,21 +6,32 @@ metadata:
 data:
   config.yml: |
     mqtt:
-      enabled: False
+      enabled: false
     detectors:
       cpu1:
         type: cpu
     cameras:
       birdfeeder:
         ffmpeg:
+          input_args: preset-rtsp-generic
           inputs:
             - path: rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.2.50:554/stream1
-              roles:
-                - detect
+              roles: [detect, record]
         detect:
           enabled: true
           width: 1280
           height: 720
+        motion:
+          threshold: 40
+          contour_area: 25
+        objects:
+          track: [bird]
+          filters:
+            bird:
+              min_area: 800
+              max_area: 200000
+              threshold: 0.55
+
         record:
           enabled: true
           retain:
@@ -31,3 +42,11 @@ data:
           timestamp: false
           retain:
             default: 2
+    notify:
+      enabled: true
+      endpoints:
+        - name: n8n-events
+          url: http://n8n.n8n.svc.cluster.local:5678/webhook/frigate
+          timeout: 10
+          verify_ssl: false
+
