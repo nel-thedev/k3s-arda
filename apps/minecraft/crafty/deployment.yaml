@@ -30,16 +30,29 @@ spec:
             - name: mc-range-2
               containerPort: 25600
           volumeMounts:
-            - name: crafty-data
-              mountPath: /crafty
-          resources:
-            requests:
-              cpu: 250m
-              memory: 512Mi
-            limits:
-              cpu: "2"
-              memory: 4Gi
+            - name: crafty-servers
+              mountPath: /crafty/servers
+            - name: crafty-logs
+              mountPath: /crafty/logs
+            - name: crafty-backups
+              mountPath: /crafty/backups
+            - name: crafty-config
+              mountPath: /crafty/app/config
+            - name: crafty-import
+              mountPath: /crafty/import
       volumes:
-        - name: crafty-data
+        - name: crafty-servers
           persistentVolumeClaim:
-            claimName: crafty-data
+            claimName: crafty-servers
+        - name: crafty-logs
+          persistentVolumeClaim:
+            claimName: crafty-logs
+        - name: crafty-backups
+          persistentVolumeClaim:
+            claimName: crafty-backups
+        - name: crafty-config
+          persistentVolumeClaim:
+            claimName: crafty-config
+        - name: crafty-import
+          persistentVolumeClaim:
+            claimName: crafty-import
