@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: crafty-pv
-  namespace: default
+  namespace: minecraft
 spec:
   capacity:
     storage: 100Gi
@@ -13,7 +13,7 @@ spec:
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: default
+    namespace: minecraft
     name: crafty-data
 ---
 apiVersion: v1
