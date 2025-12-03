@@ -15,8 +15,13 @@ spec:
     spec:
       containers:
         - name: velocity
-          image: ghcr.io/itzg/velocity:latest
+          image: itzg/minecraft-server:latest
           imagePullPolicy: Always
+          env:
+            - name: TYPE
+              value: "VELOCITY"
+            - name: VELOCITY_VERSION
+              value: "latest"
           ports:
             - name: minecraft
               containerPort: 25565
