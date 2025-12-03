@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    path: /volume1/container-configs/minecraft/servers
+    path: /volume1/minecraft/servers
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
@@ -45,7 +45,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    path: /volume1/container-configs/minecraft/logs
+    path: /volume1/minecraft/logs
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
@@ -79,7 +79,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    path: /volume1/container-configs/minecraft/backups
+    path: /volume1/minecraft/backups
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
@@ -113,7 +113,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    path: /volume1/container-configs/minecraft/config
+    path: /volume1/minecraft/config
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
@@ -147,7 +147,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    path: /volume1/container-configs/minecraft/import
+    path: /volume1/minecraft/import
     server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
