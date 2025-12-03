@@ -5,24 +5,23 @@ metadata:
   namespace: minecraft
 data:
   velocity.toml: |
+    config-version = "2.0"
+
     bind = "0.0.0.0:25565"
     motd = "§aHexagon Labs Velocity Proxy"
     show-max-players = 100
     online-mode = true
-    forwarding-secret-file = "forwarding.secret"
 
     [servers]
-      [servers.fabric]
-        address = "fabric.minecraft.svc.cluster.local:25565"
-        motd = "Fabric Backend"
-        restricted = false
+    # NEW FORMAT: right side MUST be a string!
+    fabric = "fabric.minecraft.svc.cluster.local:25565"
 
     [forced-hosts]
-      "play.hexagonlabs.cloud" = ["fabric"]
+    "play.hexagonlabs.cloud" = ["fabric"]
 
     [advanced]
-      compression-threshold = 256
+    compression-threshold = 256
 
     [query]
-      enabled = true
-      port = 25575
+    enabled = true
+    port = 25575
