@@ -22,6 +22,8 @@ spec:
               value: "VELOCITY"
             - name: VELOCITY_VERSION
               value: "latest"
+            - name: EULA
+              value: "TRUE"
           ports:
             - name: minecraft
               containerPort: 25565
