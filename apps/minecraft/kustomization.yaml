@@ -5,6 +5,17 @@ namespace: minecraft
 
 resources:
   - namespace.yaml
-  - crafty
-  - velocity
-  - dynmap
+
+  # Crafty (controller + storage)
+  - crafty/pvc.yaml
+  - crafty/deployment.yaml
+  - crafty/service.yaml
+  - crafty/fabric-service.yaml
+
+  # Velocity (public proxy)
+  - velocity/configmap.yaml
+  - velocity/deployment.yaml
+  - velocity/service-nodeport.yaml
+
+  # Dynmap (internal map via Traefik)
+  - dynmap/ingress.yaml
