@@ -14,26 +14,31 @@ spec:
         app: velocity
     spec:
       containers:
-        - name: velocity
-          image: itzg/mc-proxy:latest
-          imagePullPolicy: Always
-          env:
-            - name: TYPE
-              value: "VELOCITY"
-            - name: EULA
-              value: "TRUE"
-            - name: OVERRIDE
-              value: "false"
-          ports:
-            - name: minecraft
-              containerPort: 25565
-            - name: query
-              containerPort: 25575
-          volumeMounts:
-            - name: config
-              mountPath: /config/velocity.toml
-              subPath: velocity.toml
+      - name: velocity
+        image: eclipse-temurin:21-jdk
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "Downloading Velocity..."
+            curl -o velocity.jar https://api.papermc.io/v2/projects/velocity/versions/3.4.0-SNAPSHOT/builds/557/downloads/velocity-3.4.0-SNAPSHOT-557.jar
+            echo "Starting Velocity..."
+            java -Xms512m -Xmx512m -jar velocity.jar
+        ports:
+        - containerPort: 25565
+          name: minecraft
+        - containerPort: 25575
+          name: query
+        volumeMounts:
+        - name: velocity-config
+          mountPath: /config/velocity.toml
+          subPath: velocity.toml
+        - name: velocity-secret
+          mountPath: /server/forwarding.secret
+          subPath: forwarding.secret
       volumes:
-        - name: config
-          configMap:
-            name: velocity-config
+      - name: velocity-config
+        configMap:
+          name: velocity-config
+      - name: velocity-secret
+        emptyDir: {}

@@ -8,8 +8,8 @@ spec:
   selector:
     app: velocity
   ports:
-    - name: minecraft
-      port: 25565
-      targetPort: 25565
-      nodePort: 30065
-      protocol: TCP
+  - name: minecraft
+    port: 25565
+    targetPort: 25565
+    nodePort: 30065
+    protocol: TCP
