@@ -1,8 +1,10 @@
+###############################################
+# CRAFTY SERVERS PV + PVC
+###############################################
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: crafty-servers-pv
-  namespace: minecraft
 spec:
   capacity:
     storage: 50Gi
@@ -10,7 +12,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /volume1/container-configs/minecraft/servers
-    server: "192.168.2.10"
+    server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: minecraft
@@ -28,13 +30,15 @@ spec:
     requests:
       storage: 50Gi
 
----
 
+###############################################
+# CRAFTY LOGS PV + PVC
+###############################################
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: crafty-logs-pv
-  namespace: minecraft
 spec:
   capacity:
     storage: 5Gi
@@ -42,7 +46,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /volume1/container-configs/minecraft/logs
-    server: "192.168.2.10"
+    server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: minecraft
@@ -60,13 +64,15 @@ spec:
     requests:
       storage: 5Gi
 
----
 
+###############################################
+# CRAFTY BACKUPS PV + PVC
+###############################################
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: crafty-backups-pv
-  namespace: minecraft
 spec:
   capacity:
     storage: 10Gi
@@ -74,7 +80,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /volume1/container-configs/minecraft/backups
-    server: "192.168.2.10"
+    server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: minecraft
@@ -92,13 +98,15 @@ spec:
     requests:
       storage: 10Gi
 
----
 
+###############################################
+# CRAFTY CONFIG PV + PVC
+###############################################
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: crafty-config-pv
-  namespace: minecraft
 spec:
   capacity:
     storage: 2Gi
@@ -106,7 +114,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /volume1/container-configs/minecraft/config
-    server: "192.168.2.10"
+    server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: minecraft
@@ -124,13 +132,15 @@ spec:
     requests:
       storage: 2Gi
 
----
 
+###############################################
+# CRAFTY IMPORT PV + PVC
+###############################################
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: crafty-import-pv
-  namespace: minecraft
 spec:
   capacity:
     storage: 2Gi
@@ -138,7 +148,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /volume1/container-configs/minecraft/import
-    server: "192.168.2.10"
+    server: '192.168.2.10'
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     namespace: minecraft
