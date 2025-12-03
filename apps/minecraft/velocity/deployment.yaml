@@ -22,6 +22,8 @@ spec:
               value: "VELOCITY"
             - name: EULA
               value: "TRUE"
+            - name: OVERRIDE
+              value: "false"
           ports:
             - name: minecraft
               containerPort: 25565
