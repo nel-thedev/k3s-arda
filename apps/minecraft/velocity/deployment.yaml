@@ -15,13 +15,11 @@ spec:
     spec:
       containers:
         - name: velocity
-          image: itzg/minecraft-server:latest
+          image: itzg/mc-proxy:latest
           imagePullPolicy: Always
           env:
             - name: TYPE
               value: "VELOCITY"
-            - name: VELOCITY_VERSION
-              value: "latest"
             - name: EULA
               value: "TRUE"
           ports:
@@ -31,15 +29,8 @@ spec:
               containerPort: 25575
           volumeMounts:
             - name: config
-              mountPath: /server/velocity.toml
+              mountPath: /config/velocity.toml
               subPath: velocity.toml
-          resources:
-            requests:
-              cpu: 250m
-              memory: 512Mi
-            limits:
-              cpu: "2"
-              memory: 2Gi
       volumes:
         - name: config
           configMap:
