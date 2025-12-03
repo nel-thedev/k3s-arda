@@ -8,16 +8,22 @@ data:
     config-version = "2.0"
 
     bind = "0.0.0.0:25565"
-    motd = "§aHexagon Labs Velocity Proxy"
+
+    motd = "<green>Hexagon Labs Velocity Proxy</green>"
     show-max-players = 100
     online-mode = true
 
+    player-info-forwarding-mode = "modern"
+    forwarding-secret-file = "forwarding.secret"
+
+    # REQUIRED!
+    fallback = "fabric"
+
     [servers]
-    # NEW FORMAT: right side MUST be a string!
     fabric = "fabric.minecraft.svc.cluster.local:25565"
 
     [forced-hosts]
-    "play.hexagonlabs.cloud" = ["fabric"]
+      "play.hexagonlabs.cloud" = ["fabric"]
 
     [advanced]
     compression-threshold = 256
