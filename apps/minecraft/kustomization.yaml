@@ -11,6 +11,7 @@ resources:
   - crafty/deployment.yaml
   - crafty/service.yaml
   - crafty/fabric-service.yaml
+  - crafty/ingress.yaml
 
   # Velocity (public proxy)
   - velocity/configmap.yaml
