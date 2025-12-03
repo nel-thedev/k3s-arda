@@ -16,7 +16,6 @@ spec:
     namespace: default
     name: crafty-data
 ---
-apiVers
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
