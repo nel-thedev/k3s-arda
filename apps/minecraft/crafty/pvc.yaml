@@ -1,4 +1,23 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: crafty-pv
+  namespace: default
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /volume1/container-configs/minecraft
+    server: '192.168.2.10'
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: default
+    name: crafty-data
+---
+apiVers
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: crafty-data
@@ -8,4 +27,4 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 30Gi
+      storage: 100Gi
