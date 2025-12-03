@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: velocity-config
+  namespace: minecraft
+data:
+  velocity.toml: |
+    [servers]
+    # Name of the internal Fabric server Crafty will create
+    # You can change this name in Crafty later
+    default = "fabric"
+
+    # Server list
+    [servers.fabric]
+    address = "fabric.minecraft.svc.cluster.local:25565"
+    # Send players here by default
+    motd = "§aHexagon Labs Minecraft Server"
+    type = "minecraft"
+
+    [forced-hosts]
+    # Forward "play.<domain>" automatically to fabric
+    "play.hexagonlabs.cloud" = ["fabric"]
+
+    [bind]
+    # Velocity listens on all interfaces at port 25565
+    # NodePort handles external exposure
+    # Velocity itself stays on 25565 inside the pod
+    address = "0.0.0.0"
+    port = 25565
+
+    [player-info-forwarding]
+    mode = "modern"  # more secure
+
+    [advanced]
+    compression-threshold = 256
+
+    [query]
+    enabled = true
+    port = 25575

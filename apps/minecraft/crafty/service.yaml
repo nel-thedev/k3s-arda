@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: crafty
+  namespace: minecraft
+spec:
+  type: ClusterIP
+  selector:
+    app: crafty
+  ports:
+    - name: ui
+      port: 8443
+      targetPort: 8443
+    - name: dynmap
+      port: 8123
+      targetPort: 8123

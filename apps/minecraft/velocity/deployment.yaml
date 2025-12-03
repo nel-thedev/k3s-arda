@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velocity
+  namespace: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velocity
+  template:
+    metadata:
+      labels:
+        app: velocity
+    spec:
+      containers:
+        - name: velocity
+          image: itzg/velocity:latest
+          imagePullPolicy: Always
+          ports:
+            - name: minecraft
+              containerPort: 25565
+            - name: query
+              containerPort: 25575
+          volumeMounts:
+            - name: config
+              mountPath: /server/velocity.toml
+              subPath: velocity.toml
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+      volumes:
+        - name: config
+          configMap:
+            name: velocity-config

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crafty
+  namespace: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crafty
+  template:
+    metadata:
+      labels:
+        app: crafty
+    spec:
+      containers:
+        - name: crafty
+          image: registry.gitlab.com/crafty-controller/crafty-4:latest
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "Etc/UTC"
+          ports:
+            - name: crafty-ui
+              containerPort: 8443
+            - name: dynmap
+              containerPort: 8123
+            - name: mc-range
+              containerPort: 25500
+            - name: mc-range-2
+              containerPort: 25600
+          volumeMounts:
+            - name: crafty-data
+              mountPath: /crafty
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+      volumes:
+        - name: crafty-data
+          persistentVolumeClaim:
+            claimName: crafty-data
