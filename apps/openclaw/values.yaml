@@ -1,0 +1,31 @@
+app-template:
+  configMode: merge
+
+  controllers:
+    main:
+      containers:
+        main:
+          envFrom:
+            - secretRef:
+                name: openclaw-env
+
+        chromium:
+          enabled: true
+
+  persistence:
+    data:
+      enabled: true
+      size: 5Gi
+      accessMode: ReadWriteOnce
+      # storageClass: nfs-client  # set if needed
+
+  service:
+    main:
+      type: ClusterIP
+      ports:
+        http:
+          port: 18789
+
+  ingress:
+    main:
+      enabled: false
