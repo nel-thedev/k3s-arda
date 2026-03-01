@@ -1,31 +1,168 @@
 app-template:
-  configMode: merge
+  # IMPORTANT: set to overwrite ONCE to force the new openclaw.json to take effect,
+  # especially if a previous config exists on the PVC.
+  # After it comes up, you can switch back to `merge`.
+  configMode: overwrite
+
+  # Versions (defaults shown in chart)
+  openclawVersion: "2026.2.26"
+  chromiumVersion: "146.0.7680.31"
+
+  defaultPodOptions:
+    securityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
 
   controllers:
     main:
+      replicas: 1
       strategy: Recreate
+
+      initContainers:
+        init-config:
+          enabled: true
+        init-skills:
+          enabled: true
 
       containers:
         main:
+          image:
+            repository: ghcr.io/openclaw/openclaw
+            tag: "{{ .Values.openclawVersion }}"
+            pullPolicy: IfNotPresent
+
+          command:
+            - node
+            - dist/index.js
+          args:
+            - gateway
+            - --bind
+            - lan
+            - --port
+            - "18789"
+
           envFrom:
             - secretRef:
-                name: openclaw-env
+                name: openclaw-env-secret
+
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
 
         chromium:
           enabled: true
+          image:
+            repository: chromedp/headless-shell
+            tag: "{{ .Values.chromiumVersion }}"
+          env:
+            XDG_CACHE_HOME: /tmp
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
 
-  persistence:
-    data:
+  configMaps:
+    config:
       enabled: true
-      type: pvc
-      accessMode: ReadWriteOnce
-      size: 5Gi
-      # storageClass: nfs-client   # <- uncomment if you need a specific SC
+      data:
+        bash_aliases: |
+          alias openclaw='node /app/dist/index.js'
+
+        # OpenClaw configuration (JSON5 is allowed by the chart/init script)
+        openclaw.json: |
+          {
+            // Gateway configuration
+            "gateway": {
+              "port": 18789,
+              "mode": "local",
+
+              // REQUIRED when UI is not loopback-only:
+              "controlUi": {
+                "allowedOrigins": [
+                  "https://openclaw.hexagonlabs.cloud",
+                  "http://openclaw.hexagonlabs.cloud"
+                ]
+
+                // If you're not actually serving that host yet and want a temporary bypass,
+                // uncomment this line (less safe):
+                // ,"dangerouslyAllowHostHeaderOriginFallback": true
+              },
+
+              // IMPORTANT: exact IP matching only; list proxy IPs explicitly if/when you put an ingress in front
+              "trustedProxies": ["10.0.0.1"]
+            },
+
+            // Browser configuration
+            "browser": {
+              "enabled": true,
+              "defaultProfile": "default",
+              "profiles": {
+                "default": {
+                  "cdpUrl": "http://localhost:9222",
+                  "color": "#4285F4"
+                }
+              }
+            },
+
+            // Agent configuration
+            "agents": {
+              "defaults": {
+                "workspace": "/home/node/.openclaw/workspace",
+                "model": {
+                  "primary": "anthropic/claude-opus-4-6"
+                },
+                "userTimezone": "America/New_York",
+                "timeoutSeconds": 600,
+                "maxConcurrent": 1
+              },
+              "list": [
+                {
+                  "id": "main",
+                  "default": true,
+                  "identity": { "name": "OpenClaw", "emoji": "" }
+                }
+              ]
+            },
+
+            // Session management
+            "session": {
+              "scope": "per-sender",
+              "store": "/home/node/.openclaw/sessions",
+              "reset": { "mode": "idle", "idleMinutes": 60 }
+            },
+
+            // Logging
+            "logging": {
+              "level": "info",
+              "consoleLevel": "info",
+              "consoleStyle": "compact",
+              "redactSensitive": "tools"
+            },
+
+            // Tools configuration
+            "tools": {
+              "profile": "full",
+              "web": {
+                "search": { "enabled": false },
+                "fetch": { "enabled": true }
+              }
+            }
+          }
 
   service:
     main:
-      enabled: true
-      type: ClusterIP
+      controller: main
+      ipFamilyPolicy: SingleStack
+      ipFamilies: ["IPv4"]
       ports:
         http:
           port: 18789
@@ -34,21 +171,57 @@ app-template:
     main:
       enabled: false
 
-  configMaps:
+  persistence:
+    # ConfigMap mount for init-config container (/config/openclaw.json)
     config:
       enabled: true
-      data:
-        openclaw.json: |
-          {
-            "gateway": {
-              "host": "0.0.0.0",
-              "port": 18789,
-              "mode": "local",
-              "trustedProxies": ["10.0.0.1"],
-              "controlUi": {
-                "allowedOrigins": [
-                  "https://openclaw.hexagonlabs.cloud"
-                ]
-              }
-            }
-          }
+      type: configMap
+      identifier: config
+      advancedMounts:
+        main:
+          init-config:
+            - path: /config
+              readOnly: true
+
+    # Shell alias (optional)
+    bash-aliases:
+      enabled: true
+      type: configMap
+      identifier: config
+      advancedMounts:
+        main:
+          main:
+            - path: /home/node/.bash_aliases
+              subPath: bash_aliases
+              readOnly: true
+
+    # Persistent OpenClaw state
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      accessMode: ReadWriteOnce
+      size: 5Gi
+      # storageClass: nfs-client   # uncomment if needed
+      advancedMounts:
+        main:
+          init-config:
+            - path: /home/node/.openclaw
+          init-skills:
+            - path: /home/node/.openclaw
+          main:
+            - path: /home/node/.openclaw
+
+    # Writable /tmp for read-only root filesystem containers
+    tmp:
+      enabled: true
+      type: emptyDir
+      advancedMounts:
+        main:
+          init-config:
+            - path: /tmp
+          init-skills:
+            - path: /tmp
+          main:
+            - path: /tmp
+          chromium:
+            - path: /tmp
