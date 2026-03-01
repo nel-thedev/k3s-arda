@@ -3,6 +3,8 @@ app-template:
 
   controllers:
     main:
+      strategy: Recreate
+
       containers:
         main:
           envFrom:
@@ -15,12 +17,14 @@ app-template:
   persistence:
     data:
       enabled: true
-      size: 5Gi
+      type: pvc
       accessMode: ReadWriteOnce
-      # storageClass: nfs-client  # set if needed
+      size: 5Gi
+      # storageClass: nfs-client   # <- uncomment if you need a specific SC
 
   service:
     main:
+      enabled: true
       type: ClusterIP
       ports:
         http:
@@ -29,3 +33,22 @@ app-template:
   ingress:
     main:
       enabled: false
+
+  configMaps:
+    config:
+      enabled: true
+      data:
+        openclaw.json: |
+          {
+            "gateway": {
+              "host": "0.0.0.0",
+              "port": 18789,
+              "mode": "local",
+              "trustedProxies": ["10.0.0.1"],
+              "controlUi": {
+                "allowedOrigins": [
+                  "https://openclaw.hexagonlabs.cloud"
+                ]
+              }
+            }
+          }
