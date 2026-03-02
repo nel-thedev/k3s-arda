@@ -20,6 +20,7 @@ openclaw:
             {
               "gateway": {
                 "port": 18789,
+                "bind": "lan",
                 "mode": "local",
                 "controlUi": {
                   "allowedOrigins": [
