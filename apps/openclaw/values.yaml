@@ -49,6 +49,22 @@ openclaw:
                   "selfChatMode": true,
                   "dmPolicy": "pairing"
                 }
+              },
+
+              "browser": {
+                "enabled": true,
+                "defaultProfile": "default",
+                "profiles": {
+                  "default": {
+                    "cdpUrl": "http://127.0.0.1:9222",
+                    "color": "#4285F4"
+                  }
+                }
+              },
+              
+              "tools": {
+                "profile": "full",
+                "browser": { "enabled": true }
               }
             }
 
