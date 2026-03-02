@@ -35,11 +35,9 @@ openclaw:
                 "providers": {
                   "openai": {
                     "baseUrl": "https://api.openai.com/v1",
-                    "api": "openai-responses"
-
+                    "api": "openai-responses",
                     "models": [
-                      { "id": "gpt-5-mini"},
-                      { "id": "gpt-5.2"},
+                      { "id": "gpt-5-mini" }
                     ]
                   }
                 }
