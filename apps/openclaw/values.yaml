@@ -42,7 +42,7 @@ openclaw:
                   "timeoutSeconds": 600,
                   "maxConcurrent": 1
                 }
-              }
+              },
 
               "channels": {
                 "whatsapp": {
