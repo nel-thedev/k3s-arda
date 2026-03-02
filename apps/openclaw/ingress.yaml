@@ -3,18 +3,15 @@ kind: Ingress
 metadata:
   name: openclaw
   namespace: openclaw
-  # annotations:
-  #   kubernetes.io/ingress.class: traefik
-  #   traefik.ingress.kubernetes.io/router.middlewares: openclaw-lan-only@kubernetescrd
 spec:
   rules:
-    - host: openclaw.hexagonlabs.cloud
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: openclaw
-                port:
-                  number: 18789
+  - host: openclaw.hexagonlabs.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: openclaw
+            port:
+              number: 18789
