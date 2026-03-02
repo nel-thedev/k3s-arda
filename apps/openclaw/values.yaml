@@ -43,6 +43,13 @@ openclaw:
                   "maxConcurrent": 1
                 }
               }
+
+              "channels": {
+                "whatsapp": {
+                  "selfChatMode": true,
+                  "dmPolicy": "pairing"
+                }
+              }
             }
 
     service:
