@@ -53,7 +53,7 @@ openclaw:
 
               "browser": {
                 "enabled": true,
-                "defaultProfile": "sidecar",
+                "defaultProfile": "default",
                 "profiles": {
                   "default": {
                     "cdpUrl": "http://127.0.0.1:9222",
