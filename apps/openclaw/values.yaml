@@ -1,6 +1,6 @@
 openclaw:
   app-template:
-    configMode: overwrite
+    configMode: merge
 
     controllers:
       main:
