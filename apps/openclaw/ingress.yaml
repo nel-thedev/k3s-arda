@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: openclaw
   namespace: openclaw
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.middlewares: openclaw-lan-only@kubernetescrd
+  # annotations:
+  #   kubernetes.io/ingress.class: traefik
+  #   traefik.ingress.kubernetes.io/router.middlewares: openclaw-lan-only@kubernetescrd
 spec:
   rules:
     - host: openclaw.hexagonlabs.cloud
