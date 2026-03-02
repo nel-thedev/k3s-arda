@@ -1,0 +1,10 @@
+apiVersion: v2
+name: openclaw
+description: OpenClaw deployment for homelab
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: openclaw
+    version: 1.4.0
+    repository: https://serhanekicii.github.io/openclaw-helm
