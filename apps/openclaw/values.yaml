@@ -60,7 +60,13 @@ openclaw:
                     "color": "#4285F4"
                   }
                 }
-              }
+              },
+
+              "tools": {
+                "deny": []
+                // If you ever use allowlists, include "browser" here:
+                // "allow": ["browser", "web.fetch", "email", ...]
+              },
             }
 
     service:
