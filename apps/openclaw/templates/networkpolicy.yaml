@@ -1,21 +1,30 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: openclaw-default
+  name: openclaw
   namespace: openclaw
 spec:
   podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
+  policyTypes: ["Ingress", "Egress"]
 
   ingress:
+    # Allow ingress from Traefik (k3s default: kube-system)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 18789
+
+    # (Optional) allow from same namespace too
     - from:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: openclaw
 
   egress:
+    # DNS
     - to:
         - namespaceSelector:
             matchLabels:
@@ -26,6 +35,7 @@ spec:
         - protocol: TCP
           port: 53
 
+    # Outbound web (LLM + browsing)
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
