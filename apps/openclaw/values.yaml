@@ -49,10 +49,23 @@ openclaw:
             image:
               repository: zenika/alpine-chrome
               tag: latest
+
+            env:
+              # Force Chromium + crashpad to use writable dirs (common fix in restricted container envs)
+              XDG_CONFIG_HOME: /tmp/.chromium
+              XDG_CACHE_HOME: /tmp/.chromium-cache
+              HOME: /tmp
+
             command:
               - sh
               - -lc
               - |
+                set -e
+
+                # Make sure all dirs exist and are writable
+                mkdir -p /tmp/.chromium /tmp/.chromium-cache /tmp/chrome-profile
+                chmod -R 777 /tmp/.chromium /tmp/.chromium-cache /tmp/chrome-profile || true
+
                 exec chromium-browser \
                   --headless=new \
                   --disable-gpu \
@@ -61,9 +74,11 @@ openclaw:
                   --remote-debugging-address=0.0.0.0 \
                   --remote-debugging-port=9222 \
                   --user-data-dir=/tmp/chrome-profile
+
             ports:
               - name: cdp
                 containerPort: 9222
+
             resources:
               requests:
                 cpu: 200m
