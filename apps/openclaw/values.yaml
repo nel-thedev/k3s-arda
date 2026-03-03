@@ -19,9 +19,6 @@ openclaw:
               limits:
                 cpu: "2"
                 memory: 2Gi
-            volumeMounts:
-              - name: shm
-                mountPath: /dev/shm
 
     configMaps:
       config:
@@ -102,3 +99,7 @@ openclaw:
         type: emptyDir
         medium: Memory
         sizeLimit: 1Gi
+        advancedMounts:
+          main:
+            chromium:
+              - path: /dev/shm
