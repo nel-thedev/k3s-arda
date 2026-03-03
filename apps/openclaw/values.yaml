@@ -4,11 +4,41 @@ openclaw:
 
     controllers:
       main:
+        initContainers:
+          init-playwright:
+            image:
+              repository: ghcr.io/openclaw/openclaw
+              tag: "{{ .Values.openclawVersion }}"
+            command:
+              - sh
+              - -c
+              - |
+                log() { echo "[$(date -Iseconds)] [init-playwright] $*"; }
+
+                log "Installing Playwright into PVC (idempotent)"
+                export HOME=/tmp
+                export NPM_CONFIG_CACHE=/tmp/.npm
+
+                cd /home/node/.openclaw
+
+                if [ ! -d node_modules/playwright ]; then
+                  npm init -y >/dev/null 2>&1 || true
+                  npm install playwright
+                  log "Playwright installed"
+                else
+                  log "Playwright already present"
+                fi
+            env:
+              HOME: /tmp
+              NPM_CONFIG_CACHE: /tmp/.npm
+
         containers:
           main:
             envFrom:
               - secretRef:
                   name: openclaw-env
+            env:
+              NODE_PATH: /home/node/.openclaw/node_modules
 
           chromium:
             enabled: true
