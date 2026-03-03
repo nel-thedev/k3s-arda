@@ -18,7 +18,9 @@ openclaw:
                 log "Installing Playwright into PVC (idempotent)"
                 export HOME=/tmp
                 export NPM_CONFIG_CACHE=/tmp/.npm
+                export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
+                mkdir -p /home/node/.openclaw
                 cd /home/node/.openclaw
 
                 if [ ! -d node_modules/playwright ]; then
@@ -31,6 +33,12 @@ openclaw:
             env:
               HOME: /tmp
               NPM_CONFIG_CACHE: /tmp/.npm
+              PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+            volumeMounts:
+              - name: data
+                mountPath: /home/node/.openclaw
+              - name: tmp
+                mountPath: /tmp
 
         containers:
           main:
