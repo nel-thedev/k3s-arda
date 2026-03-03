@@ -199,20 +199,20 @@ openclaw:
           http:
             port: 18789
 
-    # ingress:
-    #   main:
-    #     enabled: true
-    #     className: traefik
-    #     annotations:
-    #       kubernetes.io/ingress.class: traefik
-    #     hosts:
-    #       - host: openclaw.hexagonlabs.cloud
-    #         paths:
-    #           - path: /
-    #             pathType: Prefix
-    #             service:
-    #               name: main
-    #               port: http
+    ingress:
+      main:
+        enabled: true
+        className: traefik
+        annotations:
+          kubernetes.io/ingress.class: traefik
+        hosts:
+          - host: openclaw.hexagonlabs.cloud
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  name: main
+                  port: http
 
     persistence:
       data:
