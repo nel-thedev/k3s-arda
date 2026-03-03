@@ -45,7 +45,6 @@ openclaw:
 
           chromium:
             enabled: true
-
             image:
               repository: zenika/alpine-chrome
               tag: "124"
@@ -63,9 +62,19 @@ openclaw:
                 set -e
                 mkdir -p /tmp/chrome-profile /tmp/.chromium /tmp/.chromium-cache
 
+                # Pick the right binary for this image
+                if command -v chromium-browser >/dev/null 2>&1; then
+                  CHROME_BIN="chromium-browser"
+                elif command -v chromium >/dev/null 2>&1; then
+                  CHROME_BIN="chromium"
+                else
+                  echo "[$(date -Iseconds)] [chromium] ERROR: no chromium binary found"
+                  exit 1
+                fi
+
                 while true; do
-                  echo "[$(date -Iseconds)] [chromium] starting google-chrome (CDP :9222)"
-                  google-chrome \
+                  echo "[$(date -Iseconds)] [chromium] starting $CHROME_BIN (CDP :9222)"
+                  $CHROME_BIN \
                     --headless=new \
                     --no-sandbox \
                     --disable-gpu \
@@ -87,7 +96,7 @@ openclaw:
                     --disable-sync \
                     --disable-translate
 
-                  echo "[$(date -Iseconds)] [chromium] google-chrome exited (code=$?) - restarting in 2s"
+                  echo "[$(date -Iseconds)] [chromium] $CHROME_BIN exited (code=$?) - restarting in 2s"
                   sleep 2
                 done
 
