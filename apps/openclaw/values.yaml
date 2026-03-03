@@ -34,11 +34,6 @@ openclaw:
               HOME: /tmp
               NPM_CONFIG_CACHE: /tmp/.npm
               PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
-            volumeMounts:
-              - name: data
-                mountPath: /home/node/.openclaw
-              - name: tmp
-                mountPath: /tmp
 
         containers:
           main:
@@ -128,9 +123,23 @@ openclaw:
       data:
         enabled: true
         size: 5Gi
+        advancedMounts:
+          main:
+            init-playwright:
+              - path: /home/node/.openclaw
+            main:
+              - path: /home/node/.openclaw
 
       tmp:
         enabled: true
+        advancedMounts:
+          main:
+            init-playwright:
+              - path: /tmp
+            main:
+              - path: /tmp
+            chromium:
+              - path: /tmp
 
       shm:
         enabled: true
