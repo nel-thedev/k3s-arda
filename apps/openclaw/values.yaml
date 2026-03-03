@@ -143,7 +143,7 @@ openclaw:
     # (No noVNC; CDP stays internal to the pod)
     service:
       main:
-        # type: NodePort
+        type: ClusterIP
         ports:
           http:
             port: 18789
