@@ -43,7 +43,7 @@ openclaw:
             env:
               NODE_PATH: /home/node/.openclaw/node_modules
 
-          # CDP Chromium sidecar (stable): browserless/chrome running google-chrome with CDP on 9222
+          # CDP Chromium sidecar (stable for K8s)
           chromium:
             enabled: true
             image:
@@ -55,22 +55,45 @@ openclaw:
               XDG_CONFIG_HOME: /tmp/.chromium
               XDG_CACHE_HOME: /tmp/.chromium-cache
 
+              DBUS_SESSION_BUS_ADDRESS: "unix:path=/dev/null"
+
             command:
               - sh
               - -lc
               - |
                 set -e
+
                 mkdir -p /tmp/chrome-profile /tmp/.chromium /tmp/.chromium-cache
 
-                exec google-chrome \
-                  --headless=new \
-                  --no-sandbox \
-                  --disable-gpu \
-                  --disable-dev-shm-usage \
-                  --remote-debugging-address=0.0.0.0 \
-                  --remote-debugging-port=9222 \
-                  --user-data-dir=/tmp/chrome-profile \
-                  --disable-features=UseDBus
+                # If Chrome ever exits for any reason, keep the container alive and restart it.
+                # This prevents "Exit Code 0 (Completed)" -> CrashLoopBackOff.
+                while true; do
+                  echo "[$(date -Iseconds)] [chromium] starting google-chrome (CDP :9222)"
+                  google-chrome \
+                    --headless=new \
+                    --no-sandbox \
+                    --disable-gpu \
+                    --disable-dev-shm-usage \
+                    --remote-debugging-address=0.0.0.0 \
+                    --remote-debugging-port=9222 \
+                    --user-data-dir=/tmp/chrome-profile \
+                    --no-first-run \
+                    --no-default-browser-check \
+                    --disable-background-networking \
+                    --disable-features=UseDBus,Vulkan,VaapiVideoDecoder,AcceleratedVideoDecodeLinuxGL \
+                    --disable-vulkan \
+                    --use-gl=swiftshader \
+                    --disable-software-rasterizer=false \
+                    --disable-breakpad \
+                    --disable-crash-reporter \
+                    --metrics-recording-only \
+                    --disable-component-update \
+                    --disable-sync \
+                    --disable-translate
+
+                  echo "[$(date -Iseconds)] [chromium] google-chrome exited (code=$?) - restarting in 2s"
+                  sleep 2
+                done
 
             ports:
               - name: cdp
@@ -84,6 +107,7 @@ openclaw:
                 cpu: "2"
                 memory: 4Gi
 
+            # More forgiving probes so Chrome startup spikes don't cause flapping
             probes:
               startup:
                 enabled: true
@@ -95,7 +119,7 @@ openclaw:
                   initialDelaySeconds: 2
                   periodSeconds: 5
                   timeoutSeconds: 5
-                  failureThreshold: 30
+                  failureThreshold: 60
               readiness:
                 enabled: true
                 custom: true
@@ -105,7 +129,7 @@ openclaw:
                     port: 9222
                   periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 6
+                  failureThreshold: 12
               liveness:
                 enabled: true
                 custom: true
