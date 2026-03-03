@@ -43,8 +43,13 @@ openclaw:
             env:
               NODE_PATH: /home/node/.openclaw/node_modules
 
+          # Chromium sidecar (NOW VNC/noVNC-capable so you can watch + intervene)
           chromium:
             enabled: true
+            image:
+              repository: selenium/standalone-chrome
+              tag: "latest"
+            # Keep resource settings similar to what you had
             resources:
               requests:
                 cpu: 200m
@@ -71,7 +76,6 @@ openclaw:
                   ]
                 }
               },
-
               "agents": {
                 "defaults": {
                   "workspace": "/home/node/.openclaw/workspace",
@@ -83,14 +87,12 @@ openclaw:
                   "maxConcurrent": 1
                 }
               },
-
               "channels": {
                 "whatsapp": {
                   "selfChatMode": true,
                   "dmPolicy": "pairing"
                 }
               },
-
               "browser": {
                 "enabled": true,
                 "defaultProfile": "default",
@@ -103,17 +105,29 @@ openclaw:
                   }
                 }
               },
-
               "tools": {
                 "deny": []
               }
             }
 
+    # Services
+    #
+    # - main service stays on 18789 (gateway)
+    # - add a NodePort for noVNC so you can watch/intervene in the browser
+    #
+    # NOTE: If you *don’t* want the gateway itself on NodePort, keep `type: ClusterIP`
+    # and only expose noVNC separately (we can split into two services if your schema
+    # complains). Start with this; if Argo complains, tell me the schema error and
+    # I’ll adjust to the chart’s supported service layout.
     service:
       main:
+        type: NodePort
         ports:
           http:
             port: 18789
+          novnc:
+            port: 7900
+            nodePort: 30790
 
     ingress:
       main:
