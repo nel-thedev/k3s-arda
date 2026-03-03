@@ -12,6 +12,16 @@ openclaw:
 
           chromium:
             enabled: true
+            resources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                cpu: "2"
+                memory: 2Gi
+            volumeMounts:
+              - name: shm
+                mountPath: /dev/shm
 
     configMaps:
       config:
@@ -54,6 +64,8 @@ openclaw:
               "browser": {
                 "enabled": true,
                 "defaultProfile": "default",
+                "remoteCdpTimeoutMs": 30000,
+                "remoteCdpHandshakeTimeoutMs": 15000,
                 "profiles": {
                   "default": {
                     "cdpUrl": "http://127.0.0.1:9222",
@@ -64,9 +76,7 @@ openclaw:
 
               "tools": {
                 "deny": []
-                // If you ever use allowlists, include "browser" here:
-                // "allow": ["browser", "web.fetch", "email", ...]
-              },
+              }
             }
 
     service:
@@ -86,3 +96,9 @@ openclaw:
 
       tmp:
         enabled: true
+
+      shm:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
