@@ -172,7 +172,7 @@ openclaw:
               },
               "channels": {
                 "whatsapp": {
-                  "selfChatMode": true,
+                  # "selfChatMode": true,
                   "dmPolicy": "pairing"
                 }
               },
