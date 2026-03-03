@@ -43,13 +43,27 @@ openclaw:
             env:
               NODE_PATH: /home/node/.openclaw/node_modules
 
-          # Chromium sidecar (NOW VNC/noVNC-capable so you can watch + intervene)
+          # CDP Chromium sidecar (headless)
           chromium:
             enabled: true
             image:
-              repository: selenium/standalone-chrome
-              tag: "latest"
-            # Keep resource settings similar to what you had
+              repository: zenika/alpine-chrome
+              tag: latest
+            command:
+              - sh
+              - -lc
+              - |
+                exec chromium-browser \
+                  --headless=new \
+                  --disable-gpu \
+                  --no-sandbox \
+                  --disable-dev-shm-usage \
+                  --remote-debugging-address=0.0.0.0 \
+                  --remote-debugging-port=9222 \
+                  --user-data-dir=/tmp/chrome-profile
+            ports:
+              - name: cdp
+                containerPort: 9222
             resources:
               requests:
                 cpu: 200m
@@ -110,24 +124,14 @@ openclaw:
               }
             }
 
-    # Services
-    #
-    # - main service stays on 18789 (gateway)
-    # - add a NodePort for noVNC so you can watch/intervene in the browser
-    #
-    # NOTE: If you *don’t* want the gateway itself on NodePort, keep `type: ClusterIP`
-    # and only expose noVNC separately (we can split into two services if your schema
-    # complains). Start with this; if Argo complains, tell me the schema error and
-    # I’ll adjust to the chart’s supported service layout.
+    # Service: expose ONLY the OpenClaw gateway (18789)
+    # (No noVNC; CDP stays internal to the pod)
     service:
       main:
-        type: NodePort
+        # type: NodePort
         ports:
           http:
             port: 18789
-          novnc:
-            port: 7900
-            nodePort: 30790
 
     ingress:
       main:
