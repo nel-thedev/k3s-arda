@@ -212,7 +212,7 @@ openclaw:
                 pathType: Prefix
                 service:
                   name: main
-                  port: http
+                  port: 18789
 
     persistence:
       data:
