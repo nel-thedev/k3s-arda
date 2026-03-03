@@ -43,7 +43,6 @@ openclaw:
             env:
               NODE_PATH: /home/node/.openclaw/node_modules
 
-          # CDP Chromium sidecar (stable for K8s)
           chromium:
             enabled: true
 
@@ -62,7 +61,6 @@ openclaw:
               - -lc
               - |
                 set -e
-
                 mkdir -p /tmp/chrome-profile /tmp/.chromium /tmp/.chromium-cache
 
                 while true; do
@@ -107,45 +105,32 @@ openclaw:
 
             probes:
               startup:
-                enabled: true
+                enabled: false
                 custom: true
                 spec:
                   exec:
-                    command:
-                      - sh
-                      - -lc
-                      - |
-                        # Busybox wget exists in alpine-based images; this stays lightweight.
-                        wget -qO- http://127.0.0.1:9222/json/version >/dev/null
+                    command: ["sh", "-lc", "wget -qO- http://127.0.0.1:9222/json/version >/dev/null"]
                   initialDelaySeconds: 2
                   periodSeconds: 5
                   timeoutSeconds: 5
                   failureThreshold: 60
 
               readiness:
-                enabled: true
+                enabled: false
                 custom: true
                 spec:
                   exec:
-                    command:
-                      - sh
-                      - -lc
-                      - |
-                        wget -qO- http://127.0.0.1:9222/json/version >/dev/null
+                    command: ["sh", "-lc", "wget -qO- http://127.0.0.1:9222/json/version >/dev/null"]
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 12
 
               liveness:
-                enabled: true
+                enabled: false
                 custom: true
                 spec:
                   exec:
-                    command:
-                      - sh
-                      - -lc
-                      - |
-                        wget -qO- http://127.0.0.1:9222/json/version >/dev/null
+                    command: ["sh", "-lc", "wget -qO- http://127.0.0.1:9222/json/version >/dev/null"]
                   periodSeconds: 30
                   timeoutSeconds: 5
                   failureThreshold: 6
