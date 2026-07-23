@@ -1,0 +1,63 @@
+# github-runner.yaml — self-hosted GitHub Actions runner for nel-thedev/celeris
+# Token comes from a Secret named `github-runner-token` (key ACCESS_TOKEN),
+# created out-of-band (kubectl / SealedSecret / ExternalSecret).
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: github-runner
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-runner
+  namespace: github-runner
+  labels:
+    app: github-runner
+spec:
+  replicas: 2                 # each pod = one ephemeral runner; bump for concurrency
+  selector:
+    matchLabels:
+      app: github-runner
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: github-runner
+    spec:
+      containers:
+        - name: runner
+          image: ghcr.io/myoung34/github-runner:latest   # pin a real tag for Argo
+          imagePullPolicy: Always
+          env:
+            - name: REPO_URL
+              value: "https://github.com/nel-thedev/celeris"
+            - name: RUNNER_NAME_PREFIX
+              value: "k3s-homelab"
+            - name: RUNNER_SCOPE
+              value: "repo"
+            - name: LABELS
+              value: "self-hosted,linux,k3s,celeris"
+            - name: EPHEMERAL
+              value: "true"
+            - name: DISABLE_AUTO_UPDATE
+              value: "true"
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: github-runner-token
+                  key: ACCESS_TOKEN
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          volumeMounts:
+            - name: work
+              mountPath: /_work
+      volumes:
+        - name: work
+          emptyDir: {}
