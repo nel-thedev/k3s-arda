@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: runner
-          image: ghcr.io/myoung34/github-runner:latest   # pin a real tag for Argo
+          image: myoung34/github-runner:2.336.0
           imagePullPolicy: Always
           env:
             - name: REPO_URL
